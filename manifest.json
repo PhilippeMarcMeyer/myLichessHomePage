@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "myLichessHomePage",
+  "version": "1.0",
+
+  "description": "my Lichess Home Page",
+  
+  "icons": {
+    "48": "icons/dontwanna-48.png",
+    "96": "icons/dontwanna-96.png"
+    },
+"permissions": [
+  "activeTab"
+],
+  "content_scripts": [
+    {
+      "matches": ["*://lichess.org/*"],
+      "js": ["dontwanna.js"]
+    }
+  ]
+}
