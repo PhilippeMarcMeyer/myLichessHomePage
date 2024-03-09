@@ -6,10 +6,10 @@ const Add_Custom_Style = css => document.head.appendChild(document.createElement
 
 const styleCss = `
 body {
-    background: linear-gradient(#243243, #142233);
+    background: linear-gradient(#243243, #22517c);
 }
 
-##main-wrap {
+#main-wrap {
     min-height : 1200px;
 }
 
@@ -47,20 +47,12 @@ body {
     color: #ccc;
     border-color: #142233;
 }
-.lobby__table{
-    position : relative;
-}
-
-.lobby__start{
-    position:absolute;
-    top:15px;
-}
 
 .lobby__start button{
     margin : 0;
     border : 1px solid rgba(255,255,255,0.5);
     border-radius : 10px;
-    background = transparent;
+    background : rgba(255,255,255,0.1);
 }
 `;
 
@@ -69,7 +61,6 @@ const runOnce = () => {
     // page elements to hide
     const targets = [
         'lobby__timeline',
-        'lobby__tv',
         'lobby__support',
         'lobby__leaderboard',
         'lobby__winners',
@@ -94,8 +85,18 @@ const runOnce = () => {
         target.forEach((x) => {
             x.style.border = '1px solid rgba(255,255,255,0.5)';
             x.borderRadius = '10px';
-            x.style.background = 'transparent'
+            x.style.background = 'rgba(255,255,255,0.1)'
         });
+    }
+
+    if(targets.includes('lobby__timeline')){
+        target = document.querySelector('.lobby__timeline');
+        if (target) {
+            target.style.display = 'flex';
+            target.style.borderRadius = '50%';
+            target.innerHTML = logo;
+
+        }
     }
 
     Add_Custom_Style(styleCss);
