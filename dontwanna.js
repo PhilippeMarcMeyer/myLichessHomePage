@@ -2,19 +2,80 @@
 
 let isRunning = false;
 
+const Add_Custom_Style = css => document.head.appendChild(document.createElement("style")).innerHTML = css
+
+const styleCss = `
+body {
+    background: linear-gradient(#243243, #142233);
+}
+
+##main-wrap {
+    min-height : 1200px;
+}
+
+.lobby__app__content.lreal_time, .lobby__app__content.lseeks, .lobby__app__content.lnow_playing, .lobby__spotlights > a{
+    background : transparent;
+}
+
+.tour-spotlight.invert, .tour-spotlight.event-spotlight, .tour-spotlight:hover, .enterable_list.lobby__box__content {
+    background : transparent;  
+}
+
+.lobby__tournaments.lobby__box > a, .lobby__box tr:nth-child(even) {
+    background : rgba(255,255,255,0.1);
+}
+
+.lobby__feed{
+    background : rgba(255,255,255,0.1);
+}
+
+.lobby__blog.ublog-post-cards {
+    margin-top: 18px;
+}
+
+.lobby__blog.ublog-post-cards > a{
+    background : rgba(255,255,255,0.1);
+}
+
+#topnav div[role='group'] {
+    background : #243243;
+}
+
+#topnav.hover section:hover>a, #topnav section:active>a {
+    height: var(--nav-section-hover);
+    background: #243243;
+    color: #ccc;
+    border-color: #142233;
+}
+.lobby__table{
+    position : relative;
+}
+
+.lobby__start{
+    position:absolute;
+    top:15px;
+}
+
+.lobby__start button{
+    margin : 0;
+    border : 1px solid rgba(255,255,255,0.5);
+    border-radius : 10px;
+    background = transparent;
+}
+`;
+
 const runOnce = () => {
 
     // page elements to hide
     const targets = [
         'lobby__timeline',
         'lobby__tv',
-        'lobby__feed',
         'lobby__support',
         'lobby__leaderboard',
         'lobby__winners',
-        'lobby__blog',
         'lobby__about',
-        'lobby__wide-winners'
+        'lobby__wide-winners',
+        'lobby__simuls'
     ];
 
     targets.forEach((x) => {
@@ -24,17 +85,11 @@ const runOnce = () => {
         }
     });
 
-    // Moving the tournament table
-    let target = document.querySelector('.lobby__tournaments-simuls');
-    if (target) {
-        target.style.width = '50%';
-        target.style.position = 'absolute';
-        target.style.top = '700px';
-        target.style.marginBottom = '50px;'
-    }
+    const logo = `<img id='logoLichess' src="data:image/svg+xml,%3Csvg viewBox='-2 -2 54 54' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23383633' stroke='%23383633' stroke-linejoin='round'%0Ad='M38.956.5c-3.53.418-6.452.902-9.286 2.984C5.534 1.786-.692 18.533.68 29.364 3.493 50.214 31.918 55.785 41.329 41.7c-7.444 7.696-19.276 8.752-28.323 3.084C3.959 39.116-.506 27.392 4.683 17.567 9.873 7.742 18.996 4.535 29.03 6.405c2.43-1.418 5.225-3.22 7.655-3.187l-1.694 4.86 12.752 21.37c-.439 5.654-5.459 6.112-5.459 6.112-.574-1.47-1.634-2.942-4.842-6.036-3.207-3.094-17.465-10.177-15.788-16.207-2.001 6.967 10.311 14.152 14.04 17.663 3.73 3.51 5.426 6.04 5.795 6.756 0 0 9.392-2.504 7.838-8.927L37.4 7.171z'/%3E%3C/svg%3E%0A"></img>`;
 
     // Make the game buttons more apparent with a backgroung photo
-    target = document.querySelectorAll('.button');
+
+    let target = document.querySelectorAll('.button');
     if (target) {
         target.forEach((x) => {
             x.style.border = '1px solid rgba(255,255,255,0.5)';
@@ -43,43 +98,7 @@ const runOnce = () => {
         });
     }
 
-    // Give more height to the main page because the tournament zone is floating over the DOM tree
-    target = document.querySelector('#main-wrap');
-    if (target) {
-        target.style.minHeight = '1200px';
-
-    }
-
-    target = document.querySelector('body');
-    if (target) {
-        target.style.background = '#142233';
-    }
-
-    target = document.querySelector('.enterable_list.lobby__box__content');
-    if (target) {
-        target.style.background = 'transparent';
-    }
-
-    target = document.querySelector('.lobby__tournaments.lobby__box > a');
-    if (target) {
-        target.style.background = 'rgba(255,255,255,0.1)';
-    }
-
-    target = document.querySelectorAll('.lobby__app__content.lpools > div');
-    if (target) {
-        target.forEach((x) => {
-            x.style.border = '1px solid rgba(255,255,255,0.5)';
-        });
-    }
-
-    target = document.querySelectorAll('.lobby__box tr:nth-child(even)');
-    if (target) {
-        target.forEach((x) => {
-            x.style.background = 'rgba(255,255,255,0.1)';
-        });
-    }
-
- 
+    Add_Custom_Style(styleCss);
 
     run(); // Will also run once at startup and then when the MutationObserver reports changes in the zone
 };
@@ -89,34 +108,16 @@ const run = () => {
     isRunning = true;
     let target = document.querySelector('.lobby__app__content.lpools');
     if (target) {
-        if(target.style.gridTemplateRows !== 'none') target.style.gridTemplateRows = 'none';
-        if(target.style.background !== 'transparent') target.style.background = 'transparent';
+        if (target.style.gridTemplateRows !== 'none') target.style.gridTemplateRows = 'none';
+        if (target.style.background !== 'transparent') target.style.background = 'transparent';
         ['1+0', '2+1', '3+0', '3+2'].forEach((x) => {
             let subTarget = target.querySelector(`[data-id='${x}']`);
             if (subTarget) {
-                if(subTarget.style.display !== 'none') subTarget.style.display = 'none';
+                if (subTarget.style.display !== 'none') subTarget.style.display = 'none';
             }
         });
     }
-    target = document.querySelector('.lobby__app__content.lreal_time');
-    if (target) {
-       if(target.style.background !== 'transparent') target.style.background = 'transparent';
-    }
-    target = document.querySelector('.lobby__app__content.lseeks');
-    if (target) {
-        if(target.style.background !== 'transparent')  target.style.background = 'transparent';
-    }    
-    target = document.querySelector('.lobby__app__content.lnow_playing');
-    if (target) {
-        if(target.style.background !== 'transparent')  target.style.background = 'transparent';
-    }
-    target = document.querySelectorAll('.lobby__spotlights > a');
-    if (target) {
-        target.forEach((x) => {
-            if(x.style.background !== 'transparent')   x.style.background = 'transparent';
-        });
-    }
-    
+
     isRunning = false;
 };
 
