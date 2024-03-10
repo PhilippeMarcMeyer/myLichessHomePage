@@ -33,8 +33,136 @@ body {
     margin-top: 18px;
 }
 
-.lobby__blog.ublog-post-cards > a{
+.lobby__blog.ublog-post-cards > a,.box {
     background : rgba(255,255,255,0.1);
+}
+
+.perf-stat .counter tr.full td:last-child, .sub-ratings a.active, .rating-history-container .time-selector-buttons button  {
+    background : rgba(255,255,255,0.1);
+}
+
+.box, .box__top user-show__header, .user-show__social{
+    background: rgba(0, 0, 0, 0.1);
+}
+
+#user_tag, .box__top.user-show__header,.site-buttons .dropdown,.dasher {
+    background : #1F3042;
+}
+
+.msg-app__convo__reply{
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.msg-app__convo__reply textarea{
+    background: transparent;
+}
+
+.round__app__table {
+    background: #2c4f6f;
+}
+
+ .msg-app__convo__msgs their {
+    background: #2c6f4f;
+}
+
+.msg-app__convo__msgs mine {
+    background: #2c4f6f;
+}
+
+.round__app .buttons {
+    background: #2c4f6f;
+}
+
+.round__app rm6 {
+    background: #2c4f6f;
+}
+
+.round__app l4x {
+    background: #2c4f6f;
+}
+
+.round__app i5z {
+    background: #2c6f4f;
+}
+
+.rclock {
+    background: transparent;
+}
+
+.mchat__tab-active {
+    background: #2c6f4f;
+}
+
+.rclock.running .time {
+    background: #2c6f4f;
+}
+
+
+
+.mchat__tab.discussion.mchat__tab-active, .mchat__tab-active, .mchat__tab-active{
+    background: #2c6f4f;
+}
+
+.round .time {
+    background: #2c6f4f;
+}
+
+.msg-app__side, .msg-app__side__search{
+   background: rgba(0, 0, 0, 0.1);
+}
+
+.msg-app__side input{
+    background: transparent;
+}
+
+.msg-app__convo__head{
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.msg-app__side__contact.active{
+    background: #2c6f4f;
+}
+
+.puzzle__tools {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.game-row:nth-child(odd) {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.mchat__tab-active {
+    color: #bababa;
+    background:#2c6f4f !important; 
+}
+
+.mchat__tab:hover {
+    background:#5c9f7f !important; 
+}
+
+.game__meta, .mchat__content,.mchat__say, .mchat__tabs,.crosstable > povs,
+ .crosstable__users, .crosstable__users > a, .round__underboard > .crosstable > fill {
+    background : rgba(255,255,255,0.1);
+}
+
+.mchat__tab{
+    background: #2c4f6f;
+}
+
+.mchat__tab.mchat__tab-active{
+    background: #2c6f4f;
+}
+
+.mchat__tab.discussion.mchat__tab-active{
+    background: #2c6f4f;
+}
+
+.mchat__tab.note.mchat__tab-active{
+    background: #2c6f4f;
+}
+
+.crosstable__score {
+    background : #a1420a;
 }
 
 #topnav div[role='group'] {
@@ -89,7 +217,7 @@ const runOnce = () => {
         });
     }
 
-    if(targets.includes('lobby__timeline')){
+    if (targets.includes('lobby__timeline')) {
         target = document.querySelector('.lobby__timeline');
         if (target) {
             target.style.display = 'flex';
