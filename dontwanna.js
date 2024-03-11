@@ -201,6 +201,10 @@ body {
     background: #2c4f6f;
 }
 
+.lobby__support a {
+    background : #395875;
+}
+
 .analyse__tools index,.analyse__tools .result,.analyse__tools .status {
     background : #2c4f6f !important;
 }
@@ -212,10 +216,8 @@ const runOnce = () => {
     // page elements to hide
     const targets = [
         'lobby__timeline',
-        'lobby__support',
         'lobby__leaderboard',
         'lobby__winners',
-        'lobby__about',
         'lobby__wide-winners',
         'lobby__simuls'
     ];
