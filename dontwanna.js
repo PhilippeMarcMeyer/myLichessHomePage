@@ -9,10 +9,6 @@ body {
     background: linear-gradient(#243243, #22517c);
 }
 
-#main-wrap {
-    min-height : 1200px;
-}
-
 .lobby__app__content.lreal_time, .lobby__app__content.lseeks, .lobby__app__content.lnow_playing, .lobby__spotlights > a{
     background : transparent;
 }
@@ -97,8 +93,6 @@ body {
     background: #2c6f4f;
 }
 
-
-
 .mchat__tab.discussion.mchat__tab-active, .mchat__tab-active, .mchat__tab-active{
     background: #2c6f4f;
 }
@@ -165,6 +159,19 @@ body {
     background : #a1420a;
 }
 
+.puzzle.puzzle-play index {
+    background : #243243 !important;
+}
+
+
+.puzzle.puzzle-play div{
+    background : #395066 !important;
+}
+
+#puzzle-difficulty{
+    background : #396650 !important;
+}
+
 #topnav div[role='group'] {
     background : #243243;
 }
@@ -182,6 +189,22 @@ body {
     border-radius : 10px;
     background : rgba(255,255,255,0.1);
 }
+.analyse__tools {
+    background: #2c6f4f;
+}
+
+.analyse__tools interrupt {
+    background: #193c2b;
+}
+
+.analyse__tools .ceval {
+    background: #2c4f6f;
+}
+
+.analyse__tools index,.analyse__tools .result,.analyse__tools .status {
+    background : #2c4f6f !important;
+}
+
 `;
 
 const runOnce = () => {
@@ -223,7 +246,6 @@ const runOnce = () => {
             target.style.display = 'flex';
             target.style.borderRadius = '50%';
             target.innerHTML = logo;
-
         }
     }
 
