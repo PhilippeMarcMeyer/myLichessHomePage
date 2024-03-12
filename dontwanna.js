@@ -227,6 +227,97 @@ body {
     background: #2c6f4f;
 }
 
+button.fbt.rematch.white{
+    background: #2c6f4f;
+}
+
+#powerTip .forecast-info .title, 
+.rcontrols .rematch.fbt, 
+.cmn-toggle:hover:not(:disabled)+label::after, 
+.cmn-toggle+label::after, 
+.crosstable povs:hover, 
+.crosstable__users, 
+.crosstable__score {
+    background: #2c6f4f !important;
+}
+
+.team-show__desc{
+    background: #2c6f4f;
+}
+
+.team-permissions table .cmn-toggle:not(:checked)+label {
+    background-color: #2c6f4f
+}
+
+.slist tbody tr:nth-child(even) {
+    background: #2c6f4f;
+}
+
+.tour__actor-info .stats h2,.tour__controls,.slist thead {
+    background: #2c6f4f;
+}
+
+.tour__meta {
+    background: transparent !important;
+}
+
+.tour__stats {
+    background: transparent !important;
+}
+
+.tour__actor-info {
+    background: transparent !important;
+}
+
+.tour__player-info .pairings tr:nth-child(odd) {
+    background: #2c6f4f;
+}
+
+.study__metadata, .study__metadata h2 {
+    background : #2c4f6f;
+}
+
+.study__metadata h2 {
+   border-bottom: none;
+}
+
+.study-search__results, .study__members, .study__chapters {
+    background: #2c6f4f !important;
+}
+
+dialog {
+    background: #2c4f6f !important;
+}
+
+input, textarea, select {
+    background: #406074;
+    border: 1px solid #204054;
+}
+
+option, optgroup {
+    background: #2c6f4f !important;
+}
+
+.game-setup .optional-config {
+    border-bottom: 1px solid #243243;
+}
+
+.game-setup .optional-config, .game-setup .ratings {
+    background: #243e57 !important;
+    border-top: 1px solid #243243 !important;
+}
+
+.btn-rack__btn, .btn-rack form, #friend_box .friend_box_title, .button.button-metal, .button.button-empty:not(.disabled):hover, .button.button-empty.button-green:not(.disabled):hover, .button.button-empty.button-red:not(.disabled):hover {
+    background: transparent !important;
+}
+
+group.radio label, group.radio .label {
+    background: transparent !important;
+}
+
+.game-setup group.radio input:checked+label {
+    background: #629924 !important;
+}
 
 `;
 const runOnce = () => {
