@@ -1,28 +1,61 @@
 'use strict';
+// First model, other could follow
+const modelColors = [
+    {
+        name : 'blueGreen', 
+        colors : {
+            linearBgStart : '#243243',
+            linearBgEnd : '#22517c',
+            neutral : 'transparent',
+            rgbaSoftWhite : 'rgba(255,255,255,0.1)',
+            rgbaSoftBlack : 'rgba(0, 0, 0, 0.1)',
+            rgbaSoftBlack2 : 'rgba(0, 0, 0, 0.2)',
+            rgbaPool : 'rgba(186, 186, 186, .05)',
+            dasher : '#1F3042',
+            primaryColor : '#2c4f6f',
+            secondaryColor : '#37614d',
+            chatHover : '#5c9f7f',
+            crossTable : '#a1420a',
+            puzzleDiv : '#395066',
+            puzzleDiff : '#396650',
+            lobbySupportA : '#395875',
+            formColor1 : '#406074',
+            formColor2: '#204054',
+            setUp : '#243e57',
+            radio : '#629924',
+        }
+    }
+]
 
+const modelName = 'blueGreen';
+
+const colors = modelColors.filter((x)=>{
+    return x.name === modelName;
+})[0].colors;
+    
 let isRunning = false;
 
 const Add_Custom_Style = css => document.head.appendChild(document.createElement("style")).innerHTML = css
 
 const styleCss = `
 body {
-    background: linear-gradient(#243243, #22517c);
+    background: linear-gradient(${colors.linearBgStart}, ${colors.linearBgEnd});
 }
 
 .lobby__app__content.lreal_time, .lobby__app__content.lseeks, .lobby__app__content.lnow_playing, .lobby__spotlights > a{
-    background : transparent;
+    background : ${colors.neutral};
 }
 
 .tour-spotlight.invert, .tour-spotlight.event-spotlight, .tour-spotlight:hover, .enterable_list.lobby__box__content {
-    background : transparent;  
+    background : ${colors.neutral};  
 }
 
 .lobby__tournaments.lobby__box > a, .lobby__box tr:nth-child(even) {
-    background : rgba(255,255,255,0.1);
+    background : ${colors.rgbaSoftWhite};
 }
 
 .lobby__feed{
-    background : rgba(255,255,255,0.1);
+    background : ${colors.rgbaSoftWhite};
 }
 
 .lobby__blog.ublog-post-cards {
@@ -30,205 +63,207 @@ body {
 }
 
 .lobby__blog.ublog-post-cards > a,.box {
-    background : rgba(255,255,255,0.1);
+    background : ${colors.rgbaSoftWhite};
 }
 
 .perf-stat .counter tr.full td:last-child, .sub-ratings a.active, .rating-history-container .time-selector-buttons button  {
-    background : rgba(255,255,255,0.1);
+    background : ${colors.rgbaSoftWhite};
 }
 
 .box, .box__top user-show__header, .user-show__social{
-    background: rgba(0, 0, 0, 0.1);
+    background: ${colors.rgbaSoftBlack};
 }
 
 #user_tag, .box__top.user-show__header,.site-buttons .dropdown,.dasher {
-    background : #1F3042;
+    background : ${colors.dasher};
 }
 
 .msg-app__convo__reply{
-    background: rgba(0, 0, 0, 0.1);
+    background: ${colors.rgbaSoftBlack};
 }
 
 .msg-app__convo__reply textarea{
-    background: transparent;
+    background: ${colors.neutral};
 }
 
 .round__app__table {
-    background: #2c4f6f;
+    background: ${colors.primaryColor};
 }
 
  .msg-app__convo__msgs their {
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .msg-app__convo__msgs mine {
-    background: #2c4f6f;
+    background: ${colors.primaryColor};
 }
 
 .round__app .buttons {
-    background: #2c4f6f;
+    background: ${colors.primaryColor};
 }
 
 .round__app rm6 {
-    background: #2c4f6f;
+    background: ${colors.primaryColor};
 }
 
 .round__app l4x {
-    background: #2c4f6f;
+    background: ${colors.primaryColor};
 }
 
 .round__app i5z {
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .rclock {
-    background: transparent;
+    background: ${colors.neutral};
 }
 
 .mchat__tab-active {
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .rclock.running .time {
-    background: #2c6f4f;
-}
+    background: ${colors.secondaryColor};
+}h
 
 .mchat__tab.discussion.mchat__tab-active, .mchat__tab-active, .mchat__tab-active{
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .round .time {
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .msg-app__side, .msg-app__side__search{
-   background: rgba(0, 0, 0, 0.1);
+   background: ${colors.rgbaSoftBlack};
 }
 
 .msg-app__side input{
-    background: transparent;
+    background: ${colors.neutral};
 }
 
 .msg-app__convo__head{
-    background: rgba(0, 0, 0, 0.2);
+    background: ${colors.rgbaSoftBlack2};
 }
 
 .msg-app__side__contact.active{
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .puzzle__tools {
-    background: rgba(0, 0, 0, 0.1);
+    background: ${colors.rgbaSoftBlack};
 }
 
 .game-row:nth-child(odd) {
-    background: rgba(0, 0, 0, 0.1);
+    background: ${colors.rgbaSoftBlack};
 }
 
 .mchat__tab-active {
     color: #bababa;
-    background:#2c6f4f !important; 
+    background:${colors.secondaryColor} !important; 
 }
 
 .mchat__tab:hover {
-    background:#5c9f7f !important; 
+    background:${colors.chatHover} !important; 
 }
 
 .game__meta, .mchat__content,.mchat__say, .mchat__tabs,.crosstable > povs,
  .crosstable__users, .crosstable__users > a, .round__underboard > .crosstable > fill {
-    background : rgba(255,255,255,0.1);
+    background : ${colors.rgbaSoftWhite};
+}
+
+.ricons {
+    margin-top: 8px;
+}
+
+.round__underboard:empty {
+    display: none;
 }
 
 .mchat__tab{
-    background: #2c4f6f;
+    background: ${colors.primaryColor};
 }
 
 .mchat__tab.mchat__tab-active{
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .mchat__tab.discussion.mchat__tab-active{
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .mchat__tab.note.mchat__tab-active{
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .crosstable__score {
-    background : #a1420a;
+    background : ${colors.crossTable};
 }
 
 .puzzle.puzzle-play index {
-    background : #243243 !important;
+    background : ${colors.linearBgStart} !important;
 }
 
+#friend_box {
+    background: ${colors.secondaryColor};
+    border: 1px solid ${colors.secondaryColor};
+}
 
 .puzzle.puzzle-play div{
-    background : #395066 !important;
+    background : ${colors.puzzleDiv} !important;
 }
 
 #puzzle-difficulty{
-    background : #396650 !important;
+    background : ${colors.puzzleDiff} !important;
 }
 
 #topnav div[role='group'] {
-    background : #243243;
+    background : ${colors.linearBgStart};
 }
 
 #topnav.hover section:hover>a, #topnav section:active>a {
-    height: var(--nav-section-hover);
-    background: #243243;
-    color: #ccc;
-    border-color: #142233;
-}
-
-.lobby__start button{
-    margin : 0;
-    border : 1px solid rgba(255,255,255,0.5);
-    border-radius : 10px;
-    background : rgba(255,255,255,0.1);
+    background: ${colors.linearBgStart};
 }
 
 .analyse__tools {
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .analyse__tools interrupt {
-    background: #193c2b;
+    background: ${colors.primaryColor};
 }
 
 .analyse__tools .ceval {
-    background: #2c4f6f;
+    background: ${colors.primaryColor};
 }
 
 .lobby__support a {
-    background : #395875;
+    background : ${colors.lobbySupportA};
 }
 
 .analyse__tools index,.analyse__tools .result,.analyse__tools .status {
-    background : #2c4f6f !important;
+    background : ${colors.primaryColor} !important;
 }
 
 .lpools > div{
-    border: 1px solid rgba(255,255,255,0.1);;
-    background: rgba(186, 186, 186, .05);
+    border: 1px solid ${colors.rgbaSoftWhite};;
+    background: ${colors.rgbaPool};
 }
 
 .lpools > div:hover{
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .button:hover{
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .button.active{
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 button.fbt.rematch.white{
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 #powerTip .forecast-info .title, 
@@ -238,43 +273,43 @@ button.fbt.rematch.white{
 .crosstable povs:hover, 
 .crosstable__users, 
 .crosstable__score {
-    background: #2c6f4f !important;
+    background: ${colors.secondaryColor} !important;
 }
 
 .team-show__desc{
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .team-permissions table .cmn-toggle:not(:checked)+label {
-    background-color: #2c6f4f
+    background-color: ${colors.secondaryColor}
 }
 
 .slist tbody tr:nth-child(even) {
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .tour__actor-info .stats h2,.tour__controls,.slist thead {
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .tour__meta {
-    background: transparent !important;
+    background: ${colors.neutral} !important;
 }
 
 .tour__stats {
-    background: transparent !important;
+    background: ${colors.neutral} !important;
 }
 
 .tour__actor-info {
-    background: transparent !important;
+    background: ${colors.neutral} !important;
 }
 
 .tour__player-info .pairings tr:nth-child(odd) {
-    background: #2c6f4f;
+    background: ${colors.secondaryColor};
 }
 
 .study__metadata, .study__metadata h2 {
-    background : #2c4f6f;
+    background : ${colors.primaryColor};
 }
 
 .study__metadata h2 {
@@ -282,43 +317,73 @@ button.fbt.rematch.white{
 }
 
 .study-search__results, .study__members, .study__chapters {
-    background: #2c6f4f !important;
+    background: ${colors.secondaryColor} !important;
 }
 
 dialog {
-    background: #2c4f6f !important;
+    background: ${colors.primaryColor} !important;
 }
 
 input, textarea, select {
-    background: #406074;
-    border: 1px solid #204054;
+    background: ${colors.formColor1};
+    border: 1px solid ${colors.formColor2};
 }
 
 option, optgroup {
-    background: #2c6f4f !important;
+    background: ${colors.secondaryColor} !important;
 }
 
 .game-setup .optional-config {
-    border-bottom: 1px solid #243243;
+    border-bottom: 1px solid ${colors.linearBgStart};
 }
 
 .game-setup .optional-config, .game-setup .ratings {
-    background: #243e57 !important;
-    border-top: 1px solid #243243 !important;
+    background: ${colors.setUp} !important;
+    border-top: 1px solid ${colors.linearBgStart} !important;
 }
 
 .btn-rack__btn, .btn-rack form, #friend_box .friend_box_title, .button.button-metal, .button.button-empty:not(.disabled):hover, .button.button-empty.button-green:not(.disabled):hover, .button.button-empty.button-red:not(.disabled):hover {
-    background: transparent !important;
+    background: ${colors.neutral} !important;
 }
 
 group.radio label, group.radio .label {
-    background: transparent !important;
+    background: ${colors.neutral} !important;
 }
 
 .game-setup group.radio input:checked+label {
-    background: #629924 !important;
+    background: ${colors.radio} !important;
 }
 
+.user-show .angles, .cmn-toggle:hover:not(:disabled)+label::after, .cmn-toggle+label::after, .crosstable povs:hover, .crosstable__users, .crosstable__score {
+    background: ${colors.primaryColor} !important;
+}
+.user-show .number-menu .to-games.active, .user-show #games.number-menu {
+    background: ${colors.primaryColor} !important;
+}
+
+.number-menu--tabs .nm-item.active {
+    background: ${colors.secondaryColor} !important;
+}
+
+#insight .insight__main {
+    background: ${colors.neutral};
+}
+
+#insight header {
+    background: ${colors.primaryColor};
+}
+
+#insight .box .top, .slist thead {
+    background: ${colors.rgbaSoftWhite};
+}
+
+#insight header .ms-choice {
+    background: ${colors.secondaryColor};
+}
+
+.ms-drop {
+    background: ${colors.secondaryColor};
+}
 `;
 const runOnce = () => {
 
