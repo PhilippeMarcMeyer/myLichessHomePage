@@ -500,6 +500,18 @@ group.radio label, group.radio .label {
 .swiss__meta {
     background: ${colors.secondaryColor}
 }
+
+.community__leaders .leaderboards li:nth-child(even) {
+    background: ${colors.linearBgStart};
+}
+
+.bots__list__entry:nth-child(odd) {
+    background: ${colors.linearBgStart};
+}
+
+.explorer-box tr:nth-child(even) {
+    background: ${colors.linearBgStart};
+}
 `;
 
 Add_Custom_Style(styleCss);
