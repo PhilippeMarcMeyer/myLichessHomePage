@@ -73,13 +73,14 @@ const rotateHue = (rotation, obj) => {
 
 let isRunning = false;
 
+
 // First model, other could follow
 const modelColors = [
     {
         name: 'blueGreen',
         colors: {
-            linearBgStart: '#243243',
-            linearBgEnd: '#22517c',
+            linearBgStart: '#25374d',
+            linearBgEnd: '#142331',
             neutral: 'transparent',
             rgbaSoftWhite: 'rgba(255,255,255,0.1)',
             rgbaSoftBlack: 'rgba(0, 0, 0, 0.1)',
@@ -491,6 +492,13 @@ group.radio label, group.radio .label {
 
 #logoLichess{
     opacity: 0.6;
+}
+
+.swiss__player-info .stats h2, .swiss__controls, .slist thead {
+    background: ${colors.secondaryColor}
+}
+.swiss__meta {
+    background: ${colors.secondaryColor}
 }
 `;
 
