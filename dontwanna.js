@@ -1,39 +1,131 @@
-'use strict';
+
+// Color tools
+//https://blog.logrocket.com/how-to-manipulate-css-colors-with-javascript-fb547113a1b8/
+
+const rgbToLightness = (r, g, b) => {
+    return (Math.max(r, g, b) + Math.min(r, g, b)) * 0.5;
+}
+
+const rgbToSaturation = (r, g, b) => {
+    const L = rgbToLightness(r, g, b);
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    return (L === 0 || L === 1)
+        ? 0
+        : (max - min) / (1 - Math.abs(2 * L - 1));
+}
+
+const rgbToHue = (r, g, b) => {
+    let x = Math.sqrt(3) * (g - b);
+    let y = 2 * r - g - b;
+    return Math.round(Math.atan2(x, y,) * (180 / Math.PI));
+}
+
+const rgbToHsl = (r, g, b) => {
+    const lightness = rgbToLightness(r, g, b);
+    const saturation = rgbToSaturation(r, g, b);
+    const hue = rgbToHue(r, g, b);
+    return [hue, saturation, lightness];
+}
+
+const hslToRgb = (h, s, l) => {
+    const C = (1 - Math.abs(2 * l - 1)) * s;
+    const hPrime = h / 60;
+    const X = C * (1 - Math.abs(hPrime % 2 - 1));
+    const m = l - C / 2;
+    const withLight = (r, g, b) => `rgb(${Math.round(r + m)},${Math.round(g + m)},${Math.round(b + m)})`;
+    if (hPrime <= 1) { return withLight(C, X, 0); } else
+        if (hPrime <= 2) { return withLight(X, C, 0); } else
+            if (hPrime <= 3) { return withLight(0, C, X); } else
+                if (hPrime <= 4) { return withLight(0, X, C); } else
+                    if (hPrime <= 5) { return withLight(X, 0, C); } else
+                        if (hPrime <= 6) { return withLight(C, 0, X); }
+}
+
+const hex2rgb = c => {
+    let result = `${c.match(/\w\w/g).map(x => +`0x${x}`)}`.split(',');
+    return {
+        r: result[0],
+        g: result[1],
+        b: result[2]
+    }
+};
+
+const rgb2hex = c => '#' + c.match(/\d+/g).map(x => (+x).toString(16).padStart(2, 0)).join``;
+
+const rgbToObject = (red, green, blue) => {
+    const [hue, saturation, lightness] = rgbToHsl(red, green, blue);
+    return { red, green, blue, hue, saturation, lightness };
+}
+
+const hslToObject = (hue, saturation, lightness) => {
+    const [red, green, blue] = hslToRgb(hue, saturation, lightness);
+    return { red, green, blue, hue, saturation, lightness };
+}
+
+const rotateHue = (rotation, obj) => {
+    let hue = obj.hue;
+    const modulo = (x, n) => (x % n + n) % n;
+    const newHue = modulo(hue + rotation, 360);
+    obj.hue = newHue
+    return obj;
+}
+
+let isRunning = false;
+
 // First model, other could follow
 const modelColors = [
     {
-        name : 'blueGreen', 
-        colors : {
-            linearBgStart : '#243243',
-            linearBgEnd : '#22517c',
-            neutral : 'transparent',
-            rgbaSoftWhite : 'rgba(255,255,255,0.1)',
-            rgbaSoftBlack : 'rgba(0, 0, 0, 0.1)',
-            rgbaSoftBlack2 : 'rgba(0, 0, 0, 0.2)',
-            rgbaPool : 'rgba(186, 186, 186, .05)',
-            dasher : '#1F3042',
-            primaryColor : '#2c4f6f',
-            secondaryColor : '#37614d',
-            chatHover : '#5c9f7f',
-            crossTable : '#a1420a',
-            puzzleDiv : '#395066',
-            puzzleDiff : '#396650',
-            lobbySupportA : '#395875',
-            formColor1 : '#406074',
+        name: 'blueGreen',
+        colors: {
+            linearBgStart: '#243243',
+            linearBgEnd: '#22517c',
+            neutral: 'transparent',
+            rgbaSoftWhite: 'rgba(255,255,255,0.1)',
+            rgbaSoftBlack: 'rgba(0, 0, 0, 0.1)',
+            rgbaSoftBlack2: 'rgba(0, 0, 0, 0.2)',
+            rgbaPool: 'rgba(186, 186, 186, .05)',
+            dasher: '#1F3042',
+            primaryColor: '#2c4f6f',
+            secondaryColor: '#37614d',
+            chatHover: '#5c9f7f',
+            crossTable: '#a1420a',
+            puzzleDiv: '#395066',
+            puzzleDiff: '#396650',
+            lobbySupportA: '#395875',
+            formColor1: '#406074',
             formColor2: '#204054',
-            setUp : '#243e57',
-            radio : '#629924',
+            setUp: '#243e57',
+            radio: '#629924',
+            logo: 'silver'
         }
     }
 ]
 
 const modelName = 'blueGreen';
 
-const colors = modelColors.filter((x)=>{
+const colors = modelColors.filter((x) => {
     return x.name === modelName;
 })[0].colors;
-    
-let isRunning = false;
+
+
+const setModel = (rot) => {
+const rotation = rot;
+
+if (rotation > 0) {
+    for (const [key, value] of Object.entries(colors)) {
+        if (value.startsWith('#')) {
+            let rgb = hex2rgb(value);
+            let colorObj = rgbToObject(rgb.r, rgb.g, rgb.b);
+            let rotatedObj = rotateHue(rotation, colorObj);
+            rgb = hslToRgb(rotatedObj.hue, rotatedObj.saturation, rotatedObj.lightness);
+            let hex = rgb2hex(rgb);
+            console.log(hex);
+            colors[key] = hex;
+        }
+    }
+}
+
 
 const Add_Custom_Style = css => document.head.appendChild(document.createElement("style")).innerHTML = css
 
@@ -225,6 +317,14 @@ body {
     background: ${colors.linearBgStart};
 }
 
+.site-buttons.dropdown{
+    background: ${colors.linearBgStart};
+}
+
+.site-buttons .shown .toggle {
+    background: ${colors.linearBgStart};
+}
+
 .analyse__tools {
     background: ${colors.secondaryColor};
 }
@@ -384,8 +484,21 @@ group.radio label, group.radio .label {
 .ms-drop {
     background: ${colors.secondaryColor};
 }
+
+#challenge-app .empty {
+    background: ${colors.linearBgStart} !important;
+}
+
+#logoLichess{
+    opacity: 0.6;
+}
 `;
-const runOnce = () => {
+
+Add_Custom_Style(styleCss);
+
+}
+
+const runOnce = (rot) => {
 
     // page elements to hide
     const targets = [
@@ -403,7 +516,7 @@ const runOnce = () => {
         }
     });
 
-    const logo = `<img id='logoLichess' src="data:image/svg+xml,%3Csvg viewBox='-2 -2 54 54' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23383633' stroke='%23383633' stroke-linejoin='round'%0Ad='M38.956.5c-3.53.418-6.452.902-9.286 2.984C5.534 1.786-.692 18.533.68 29.364 3.493 50.214 31.918 55.785 41.329 41.7c-7.444 7.696-19.276 8.752-28.323 3.084C3.959 39.116-.506 27.392 4.683 17.567 9.873 7.742 18.996 4.535 29.03 6.405c2.43-1.418 5.225-3.22 7.655-3.187l-1.694 4.86 12.752 21.37c-.439 5.654-5.459 6.112-5.459 6.112-.574-1.47-1.634-2.942-4.842-6.036-3.207-3.094-17.465-10.177-15.788-16.207-2.001 6.967 10.311 14.152 14.04 17.663 3.73 3.51 5.426 6.04 5.795 6.756 0 0 9.392-2.504 7.838-8.927L37.4 7.171z'/%3E%3C/svg%3E%0A"></img>`;
+    const logo = `<img id='logoLichess' src="data:image/svg+xml,%3Csvg viewBox='-2 -2 54 54' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='${colors.logo}' stroke='${colors.logo}' stroke-linejoin='round'%0Ad='M38.956.5c-3.53.418-6.452.902-9.286 2.984C5.534 1.786-.692 18.533.68 29.364 3.493 50.214 31.918 55.785 41.329 41.7c-7.444 7.696-19.276 8.752-28.323 3.084C3.959 39.116-.506 27.392 4.683 17.567 9.873 7.742 18.996 4.535 29.03 6.405c2.43-1.418 5.225-3.22 7.655-3.187l-1.694 4.86 12.752 21.37c-.439 5.654-5.459 6.112-5.459 6.112-.574-1.47-1.634-2.942-4.842-6.036-3.207-3.094-17.465-10.177-15.788-16.207-2.001 6.967 10.311 14.152 14.04 17.663 3.73 3.51 5.426 6.04 5.795 6.756 0 0 9.392-2.504 7.838-8.927L37.4 7.171z'/%3E%3C/svg%3E%0A"></img>`;
 
     let target = document.querySelectorAll('.button');
     if (target) {
@@ -423,7 +536,6 @@ const runOnce = () => {
         }
     }
 
-    Add_Custom_Style(styleCss);
 
     run(); // Will also run once at startup and then when the MutationObserver reports changes in the zone
 };
@@ -455,9 +567,18 @@ const launchObserver = () => {
     observer.observe(document, { childList: true, subtree: true });
 };
 
-const init = () => {
+const init = (rot) => {
+    setModel(rot)
     runOnce();
     launchObserver();
 };
 
-init();
+chrome.storage.sync.get('rotation', (result) => {
+    if (result.rotation === undefined) {
+        rot = 0;
+      chrome.storage.sync.set({ rotation: 0 });
+    } else {
+        rot = parseInt(result.rotation);
+    }
+    init(rot);
+})

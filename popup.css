@@ -1,0 +1,25 @@
+body {
+    font-family: "Noto sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+input {
+    vertical-align: -5%;
+    margin-left: 6px;
+}
+
+.container {
+    width: 360px;
+    text-align: center;
+    border: 3px solid #769656;
+    background-color: #EEEED2;
+    padding: 4px 4px 28px 4px;
+    border-radius: 4px;
+}
+
+.sub {
+    margin-top: 10px;
+}
