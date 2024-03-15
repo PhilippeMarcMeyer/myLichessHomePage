@@ -512,6 +512,14 @@ group.radio label, group.radio .label {
 .explorer-box tr:nth-child(even) {
     background: ${colors.linearBgStart};
 }
+
+.study-search__results>div:hover, .study__members>div:hover, .study__chapters>div:hover, .study-search__results>div.active, .study__members>div.active, .study__chapters>div.active {
+    background: ${colors.primaryColor};
+}
+
+.study__metadata h2, .study__player, .analyse__clock, #analyse-cm .title, .explorer__config .choices button, .slist thead, .cmn-toggle:hover:not(:disabled)+label::after, .cmn-toggle+label::after, .crosstable povs:hover, .crosstable__users, .crosstable__score {
+    background: ${colors.primaryColor};
+}
 `;
 
 Add_Custom_Style(styleCss);
