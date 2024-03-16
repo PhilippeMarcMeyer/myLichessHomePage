@@ -121,7 +121,6 @@ if (rotation > 0) {
             let rotatedObj = rotateHue(rotation, colorObj);
             rgb = hslToRgb(rotatedObj.hue, rotatedObj.saturation, rotatedObj.lightness);
             let hex = rgb2hex(rgb);
-            console.log(hex);
             colors[key] = hex;
         }
     }
