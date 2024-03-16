@@ -519,22 +519,21 @@ group.radio label, group.radio .label {
 .study__metadata h2, .study__player, .analyse__clock, #analyse-cm .title, .explorer__config .choices button, .slist thead, .cmn-toggle:hover:not(:disabled)+label::after, .cmn-toggle+label::after, .crosstable povs:hover, .crosstable__users, .crosstable__score {
     background: ${colors.primaryColor};
 }
+
+.lobby__box__top, #hook .opponent {
+    background: ${colors.rgbaSoftWhite};
+}
+
+.lobby__box__content {
+    background: ${colors.neutral};  
+}
 `;
 
 Add_Custom_Style(styleCss);
 
 }
 
-const runOnce = (rot) => {
-
-    // page elements to hide
-    const targets = [
-        'lobby__timeline',
-        'lobby__leaderboard',
-        'lobby__winners',
-        'lobby__wide-winners',
-        'lobby__simuls'
-    ];
+const runOnce = (targets) => {
 
     targets.forEach((x) => {
         let target = document.querySelector('.' + x);
@@ -594,18 +593,42 @@ const launchObserver = () => {
     observer.observe(document, { childList: true, subtree: true });
 };
 
-const init = (rot) => {
+const init = (rot, targets) => {
     setModel(rot)
-    runOnce();
+    runOnce(targets);
     launchObserver();
 };
 
 chrome.storage.sync.get('rotation', (result) => {
-    if (result.rotation === undefined) {
+    if (!result || result.rotation === undefined) {
         rot = 0;
-      chrome.storage.sync.set({ rotation: 0 });
+        chrome.storage.sync.set({ rotation: 0 });
     } else {
         rot = parseInt(result.rotation);
     }
-    init(rot);
+    // page elements to hide
+    const defaultTargets = [
+        'lobby__timeline',
+        'lobby__leaderboard',
+        'lobby__winners',
+        'lobby__wide-winners',
+        'lobby__simuls'
+    ];
+
+    let targets = [];
+
+    chrome.storage.sync.get('hideAreas', (result) => {
+        if (!result || result.hideAreas === undefined) {
+          defaultTargets.forEach((x) => {
+            targets.push(x);
+          });
+          chrome.storage.sync.set({ 'hideAreas': targets });
+        } else {
+          result.hideAreas.forEach((x) => {
+            targets.push(x);
+          });
+        }
+        init(rot,targets);
+      });
+
 })
