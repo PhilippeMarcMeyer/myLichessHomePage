@@ -6,8 +6,8 @@
   "description": "my Lichess Home Page",
   
   "icons": {
-    "48": "icons/dontwanna-48.png",
-    "96": "icons/dontwanna-96.png"
+    "48": "icons/mlhp-48.png",
+    "96": "icons/mlhp-96.png"
     },
 "permissions": [
   "activeTab",

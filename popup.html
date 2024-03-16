@@ -18,9 +18,8 @@
 		</div>
 		<h1>My lichess homepage</h1>
 		<div class="sub">
-			<label for="rotation">Color rotation (0 to 360) ? </label><br/>
+			<label for="rotation">Color rotation : <span id="result"></span> to 360°</label><br/>
 			<input type="range" id="rotation" min="0" max="360" step="1" value="0" style="width:200px;">
-			<div id="result"></div>
 	    </div>
 		<h3>Areas to hide </h3>
 		<div class="sub hide-areas">
@@ -35,6 +34,19 @@
 			<input type="checkbox" id="lobby__feed"><label for="lobby__feed">lobby feed</label>
 			<input type="checkbox" id="lobby__tournaments"><label for="lobby__tournaments">lobby tournaments</label><br/>
 	    </div>
-		
+		<h3>Challenges to hide </h3>
+		<div class="sub hide-challenges">
+			<input type="checkbox" data-target="1+0"><label>1+0</label>
+			<input type="checkbox" data-target="2+1"><label>2+1</label>
+			<input type="checkbox" data-target="3+0"><label>3+0</label><br/>
+			<input type="checkbox" data-target="3+2"><label>3+2</label>
+			<input type="checkbox" data-target="5+0"><label>5+0</label>
+			<input type="checkbox" data-target="5+3"><label>5+3</label><br/>
+			<input type="checkbox" data-target="10+0"><label>10+0</label>
+			<input type="checkbox" data-target="10+5"><label>10+5</label>
+			<input type="checkbox" data-target="15+10"><label>15+10</label><br/>
+			<input type="checkbox" data-target="30+0"><label>30+0</label>
+			<input type="checkbox" data-target="30+20"><label>30+20</label>
+	    </div>
 	<script src="popup.js"></script>
 </body>

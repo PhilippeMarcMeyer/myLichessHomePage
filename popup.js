@@ -1,12 +1,4 @@
 'use strict';
-// Initialize 
-const defaultTargets = [
-  'lobby__timeline',
-  'lobby__leaderboard',
-  'lobby__winners',
-  'lobby__wide-winners',
-  'lobby__simuls'
-];
 
 const rotationElement = document.getElementById('rotation');
 const resultElement = document.getElementById('result');
@@ -21,9 +13,21 @@ if (rotationElement && resultElement) {
     chrome.storage.sync.set({ "rotation": rot });
   })
 }
+
+
+
 const hideAreasElements = document.querySelectorAll(".hide-areas > input[type=checkbox]");
 
 if (hideAreasElements) {
+
+  const defaultTargets = [
+    'lobby__timeline',
+    'lobby__leaderboard',
+    'lobby__winners',
+    'lobby__wide-winners',
+    'lobby__simuls'
+  ];
+
   let targets = [];
   chrome.storage.sync.get('hideAreas', (result) => {
     if (!result || result.hideAreas === undefined) {
@@ -39,16 +43,54 @@ if (hideAreasElements) {
     hideAreasElements.forEach((x) => {
       x.checked = targets.includes(x.getAttribute('id'));
     });
-  })
+  });
+
   hideAreasElements.forEach((el) => {
-    addEventListener('click', function (event) {
+    addEventListener('change', function (event) {
       let checkedOnes = [];
       hideAreasElements.forEach((x) => {
         if (x.checked) {
           checkedOnes.push(x.getAttribute('id'));
         }
       });
-      chrome.storage.sync.set({ "hideAreas": checkedOnes });
+      chrome.storage.sync.set({ 'hideAreas': checkedOnes });
     });
   })
 }
+
+const hideChallengesElements = document.querySelectorAll(".hide-challenges > input[type=checkbox]");
+
+if (hideChallengesElements) {
+
+  const defaultChallenges = ['1+0', '2+1', '3+0', '3+2'];
+
+  let challenges = [];
+  chrome.storage.sync.get('hideChallenges', (result) => {
+    if (!result || result.hideChallenges === undefined) {
+      defaultChallenges.forEach((x) => {
+        challenges.push(x);
+      });
+      chrome.storage.sync.set({ hideChallenges: challenges });
+    } else {
+      result.hideChallenges.forEach((x) => {
+        challenges.push(x);
+      });
+    }
+    hideChallengesElements.forEach((x) => {
+      x.checked = challenges.includes(x.getAttribute('data-target'));
+    });
+  });
+
+  hideChallengesElements.forEach((el) => {
+    addEventListener('change', function (event) {
+      let checkedOnes = [];
+      hideChallengesElements.forEach((x) => {
+        if (x.checked) {
+          checkedOnes.push(x.getAttribute('data-target'));
+        }
+      });
+      chrome.storage.sync.set({ "hideChallenges": checkedOnes });
+    });
+  })
+}
+

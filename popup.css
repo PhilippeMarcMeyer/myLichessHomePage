@@ -39,7 +39,21 @@ input {
     padding: 5px;
 }
 
-label{
+.hide-areas label{
     min-width : 130px;
+    display:inline-block;
+}
+
+.hide-challenges{
+    margin : 0 100px 0 100px;
+    margin-top: 0;
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.2);    
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.hide-challenges label{
+    min-width : 75px;
     display:inline-block;
 }

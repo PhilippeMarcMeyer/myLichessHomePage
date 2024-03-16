@@ -110,7 +110,7 @@ const colors = modelColors.filter((x) => {
 })[0].colors;
 
 
-const setModel = (rot) => {
+const setModel = (rot, challenges) => {
 const rotation = rot;
 
 if (rotation > 0) {
@@ -129,7 +129,7 @@ if (rotation > 0) {
 
 const Add_Custom_Style = css => document.head.appendChild(document.createElement("style")).innerHTML = css
 
-const styleCss = `
+let styleCss = `
 body {
     background: linear-gradient(${colors.linearBgStart}, ${colors.linearBgEnd});
 }
@@ -192,6 +192,10 @@ body {
 
 .round__app .buttons {
     background: ${colors.primaryColor};
+}
+
+#powerTip, #miniGame, #miniBoard {
+    background:  ${colors.primaryColor};
 }
 
 .round__app rm6 {
@@ -527,13 +531,21 @@ group.radio label, group.radio .label {
 .lobby__box__content {
     background: ${colors.neutral};  
 }
+
 `;
 
-Add_Custom_Style(styleCss);
-
+if (challenges.length >= 9) {
+    styleCss += `
+    .lobby__app__content > div {
+        max-height: 50%;
+    }
+    `;
 }
 
-const runOnce = (targets) => {
+Add_Custom_Style(styleCss);
+}
+
+const runOnce = (targets, challenges) => {
 
     targets.forEach((x) => {
         let target = document.querySelector('.' + x);
@@ -562,18 +574,17 @@ const runOnce = (targets) => {
         }
     }
 
-
-    run(); // Will also run once at startup and then when the MutationObserver reports changes in the zone
+    run(challenges); // Will also run once at startup and then when the MutationObserver reports changes in the zone
 };
 
-const run = () => {
+const run = (challenges) => {
     // Hide bullets and 3 minutes blitz
     isRunning = true;
     let target = document.querySelector('.lobby__app__content.lpools');
     if (target) {
         if (target.style.gridTemplateRows !== 'none') target.style.gridTemplateRows = 'none';
         if (target.style.background !== 'transparent') target.style.background = 'transparent';
-        ['1+0', '2+1', '3+0', '3+2'].forEach((x) => {
+        challenges.forEach((x) => {
             let subTarget = target.querySelector(`[data-id='${x}']`);
             if (subTarget) {
                 if (subTarget.style.display !== 'none') subTarget.style.display = 'none';
@@ -584,19 +595,19 @@ const run = () => {
     isRunning = false;
 };
 
-const launchObserver = () => {
+const launchObserver = (challenges) => {
     const observer = new MutationObserver((mutations) => {
         let target = document.querySelector('.lobby__app');
 
-        if (!isRunning && target) run();
+        if (!isRunning && target) run(challenges);
     });
     observer.observe(document, { childList: true, subtree: true });
 };
 
-const init = (rot, targets) => {
-    setModel(rot)
-    runOnce(targets);
-    launchObserver();
+const init = (rot, targets, challenges) => {
+    setModel(rot, challenges)
+    runOnce(targets, challenges);
+    launchObserver(challenges);
 };
 
 chrome.storage.sync.get('rotation', (result) => {
@@ -628,7 +639,25 @@ chrome.storage.sync.get('rotation', (result) => {
             targets.push(x);
           });
         }
-        init(rot,targets);
-      });
 
+        const defaultChallenges = ['1+0', '2+1', '3+0', '3+2'];
+
+        let challenges = [];
+
+        chrome.storage.sync.get('hideChallenges', (result) => {
+            if (!result || result.hideChallenges === undefined) {
+                defaultChallenges.forEach((x) => {
+                    challenges.push(x);
+                });
+                chrome.storage.sync.set({ 'hideChallenges': challenges });
+            } else {
+                result.hideChallenges.forEach((x) => {
+                    challenges.push(x);
+                });
+            }
+            init(rot, targets, challenges);
+        });
+
+      });
+      
 })
