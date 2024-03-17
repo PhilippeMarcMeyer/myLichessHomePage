@@ -14,7 +14,13 @@ if (rotationElement && resultElement) {
   })
 }
 
-
+const closeElement = document.querySelector("#closePopUp");
+if(closeElement){
+  closeElement.disabled = false;
+  closeElement.addEventListener('click', function () {
+    window.close();
+  });
+}
 
 const hideAreasElements = document.querySelectorAll(".hide-areas > input[type=checkbox]");
 
@@ -47,6 +53,7 @@ if (hideAreasElements) {
 
   hideAreasElements.forEach((el) => {
     addEventListener('change', function (event) {
+      closeElement.disabled = true;
       let checkedOnes = [];
       hideAreasElements.forEach((x) => {
         if (x.checked) {
@@ -54,6 +61,7 @@ if (hideAreasElements) {
         }
       });
       chrome.storage.sync.set({ 'hideAreas': checkedOnes });
+      closeElement.disabled = false;
     });
   })
 }
@@ -83,6 +91,7 @@ if (hideChallengesElements) {
 
   hideChallengesElements.forEach((el) => {
     addEventListener('change', function (event) {
+      closeElement.disabled = true;
       let checkedOnes = [];
       hideChallengesElements.forEach((x) => {
         if (x.checked) {
@@ -90,6 +99,7 @@ if (hideChallengesElements) {
         }
       });
       chrome.storage.sync.set({ "hideChallenges": checkedOnes });
+      closeElement.disabled = false;
     });
   })
 }

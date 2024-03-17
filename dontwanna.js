@@ -540,6 +540,9 @@ group.radio label, group.radio .label {
     background: ${colors.rgbaSoftWhite} !important;
 }
 
+.slist tbody tr:nth-child(even) {
+    background: ${colors.secondaryColor} !important;
+}
 
 `;
 
@@ -548,8 +551,19 @@ if (challenges.length >= 9) {
     .lobby__app__content > div {
         max-height: 50%;
     }
+
     `;
 }
+
+if (challenges.length < 11) {
+    styleCss += `
+    .lobby__app__content > div.custom {
+        display : none;
+    }
+
+    `;
+}
+
 
 Add_Custom_Style(styleCss);
 }
