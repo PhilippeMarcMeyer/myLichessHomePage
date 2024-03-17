@@ -532,6 +532,15 @@ group.radio label, group.radio .label {
     background: ${colors.neutral};  
 }
 
+.site_notification.privateMessage {
+    border-bottom: 1px : ${colors.secondaryColor} !important;
+}
+
+.site_notification.privateMessage:hover {
+    background: ${colors.rgbaSoftWhite} !important;
+}
+
+
 `;
 
 if (challenges.length >= 9) {
