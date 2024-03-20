@@ -73,7 +73,6 @@ const rotateHue = (rotation, obj) => {
 
 let isRunning = false;
 
-
 // First model, other could follow
 const modelColors = [
     {
@@ -126,20 +125,7 @@ if (rotation > 0) {
     }
 }
 
-
 const Add_Custom_Style = css => document.head.appendChild(document.createElement("style")).innerHTML = css
-/*
-body>header {
-    max-width: unset;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    padding: 0 var(--site-header-sticky-padding);
-    transition: transform 150ms ease-in-out,border-color 150ms ease-in-out;
-    border-bottom: 1px solid #22201b;
-    background-image: linear-gradient(to bottom, hsl(37, 12%, 16%), #22201b 60px);
-}
-*/
 
 let styleCss = `
 body {
@@ -454,6 +440,14 @@ button.fbt.rematch.white{
    border-bottom: none;
 }
 
+.coach-list__main .coach-widget:nth-child(even) {
+    background: ${colors.secondaryColor};
+}
+
+.coach-list__main .coach-widget:hover {
+    background: ${colors.rgbaSoftWhite};
+}
+
 .study-search__results, .study__members, .study__chapters {
     background: ${colors.secondaryColor} !important;
 }
@@ -579,6 +573,22 @@ group.radio label, group.radio .label {
 
 .slist tbody tr:nth-child(even) {
     background: ${colors.secondaryColor} !important;
+}
+
+.opening__config {
+    background: ${colors.primaryColor};
+}
+
+.opening__config:hover {
+    background: ${colors.secondaryColor}
+}
+
+.streamer-list .streamer:nth-child(even) {
+    background: ${colors.linearBgStart};
+}
+
+.analyse__moves button.next {
+    background: ${colors.primaryColor};
 }
 
 `;
