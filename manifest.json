@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "myLichessHomePage",
-  "version": "1.0",
+  "version": "1.01",
 
   "description": "my Lichess Home Page",
   
@@ -10,7 +10,6 @@
     "96": "icons/mlhp-96.png"
     },
 "permissions": [
-  "activeTab",
   "storage"
 ],
   "content_scripts": [

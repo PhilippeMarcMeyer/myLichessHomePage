@@ -128,10 +128,44 @@ if (rotation > 0) {
 
 
 const Add_Custom_Style = css => document.head.appendChild(document.createElement("style")).innerHTML = css
+/*
+body>header {
+    max-width: unset;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 0 var(--site-header-sticky-padding);
+    transition: transform 150ms ease-in-out,border-color 150ms ease-in-out;
+    border-bottom: 1px solid #22201b;
+    background-image: linear-gradient(to bottom, hsl(37, 12%, 16%), #22201b 60px);
+}
+*/
 
 let styleCss = `
 body {
     background: linear-gradient(${colors.linearBgStart}, ${colors.linearBgEnd});
+}
+
+body>header {
+    background : ${colors.linearBgStart} !important;
+    border-bottom: 1px solid ${colors.linearBgStart} !important;
+}
+
+.mselect__list {
+    background: ${colors.primaryColor} !important;
+}
+
+.mselect__list .current {
+    background: ${colors.secondaryColor};
+}
+
+
+.mselect__list>*:hover {
+   background : ${colors.rgbaSoftWhite};
+}
+
+.analyse__clock, #analyse-cm .title, .explorer__config .choices button, .mselect__label, .cmn-toggle:hover:not(:disabled)+label::after, .cmn-toggle+label::after, .crosstable povs:hover, .crosstable__users, .crosstable__score {
+    background: ${colors.primaryColor} !important;
 }
 
 .lobby__app__content.lreal_time, .lobby__app__content.lseeks, .lobby__app__content.lnow_playing, .lobby__spotlights > a{
@@ -429,10 +463,13 @@ dialog {
 }
 
 input, textarea, select {
-    background: ${colors.formColor1};
-    border: 1px solid ${colors.formColor2};
+    background: ${colors.formColor1}  !important;;
+    border: 1px solid ${colors.formColor2}  !important;;
 }
 
+.ublog-post-card {
+    background:  ${colors.primaryColor} !important;
+}
 option, optgroup {
     background: ${colors.secondaryColor} !important;
 }

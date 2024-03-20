@@ -12,5 +12,6 @@ I also hided some blocks of info on the main page and some challenge buttons (I'
 
 03/17/2024 : some challenge speeds may now be hidden in the lobby (landing page)
 
+03/20/2024 : new css as the syle of lichess has evolved
 
 ![image](https://github.com/PhilippeMarcMeyer/myLichessHomePage/assets/2178299/315c29fd-bef2-47a9-bbe4-27f069cf73db)
