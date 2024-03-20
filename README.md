@@ -22,4 +22,4 @@ set your preferences in the popup window
 
 03/20/2024 : new css as the syle of lichess has evolved
 
-![image](https://github.com/PhilippeMarcMeyer/myLichessHomePage/assets/2178299/315c29fd-bef2-47a9-bbe4-27f069cf73db)
+![chromeStoreMlhp1](https://github.com/PhilippeMarcMeyer/myLichessHomePage/assets/2178299/19683570-52c8-447f-acfe-6ce31365d7f1)
