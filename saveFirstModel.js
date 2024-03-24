@@ -1,3 +1,61 @@
+const rgbToObject = (red, green, blue) => {
+    const [hue, saturation, lightness] = rgbToHsl(red, green, blue);
+    return { red, green, blue, hue, saturation, lightness };
+}
+
+const hslToObject = (hue, saturation, lightness) => {
+    const [red, green, blue] = hslToRgb(hue, saturation, lightness);
+    return { red, green, blue, hue, saturation, lightness };
+}
+
+const rotateHue = (rotation, obj) => {
+    let hue = obj.hue;
+    const modulo = (x, n) => x % n;
+    const newHue = modulo(hue + rotation, 360);
+    obj.hue = newHue
+    return obj;
+}
+
+const rgbToLightness = (r, g, b) => {
+    return (Math.max(r, g, b) + Math.min(r, g, b)) * 0.5;
+}
+
+const rgbToSaturation = (r, g, b) => {
+    const L = rgbToLightness(r, g, b);
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    return (L === 0 || L === 1)
+        ? 0
+        : (max - min) / (1 - Math.abs(2 * L - 1));
+}
+
+const rgbToHue = (r, g, b) => {
+    let x = Math.sqrt(3) * (g - b);
+    let y = 2 * r - g - b;
+    return Math.round(Math.atan2(x, y,) * (180 / Math.PI));
+}
+
+const rgbToHsl = (r, g, b) => {
+    const lightness = rgbToLightness(r, g, b);
+    const saturation = rgbToSaturation(r, g, b);
+    const hue = rgbToHue(r, g, b);
+    return [hue, saturation, lightness];
+}
+
+const hslToRgb = (h, s, l) => {
+    const C = (1 - Math.abs(2 * l - 1)) * s;
+    const hPrime = h / 60;
+    const X = C * (1 - Math.abs(hPrime % 2 - 1));
+    const m = l - C / 2;
+    const withLight = (r, g, b) => `rgb(${Math.round(r + m)},${Math.round(g + m)},${Math.round(b + m)})`;
+    if (hPrime <= 1) { return withLight(C, X, 0); } else
+        if (hPrime <= 2) { return withLight(X, C, 0); } else
+            if (hPrime <= 3) { return withLight(0, C, X); } else
+                if (hPrime <= 4) { return withLight(0, X, C); } else
+                    if (hPrime <= 5) { return withLight(X, 0, C); } else
+                        if (hPrime <= 6) { return withLight(C, 0, X); }
+}
+
 const styleCss = `
 body {
     background: linear-gradient(#243243, #22517c);

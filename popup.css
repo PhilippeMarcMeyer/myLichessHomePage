@@ -26,8 +26,18 @@ input {
     color: white;
 }
 
+h2{
+    margin: 0 0 10px 0;
+}
+
 .sub {
     margin-top: 10px;
+}
+
+.sub.rotation{
+    margin: 10px 50px 0 50px;
+    padding-top: 3px;
+    border-radius: 6px;
 }
 
 .hide-areas{

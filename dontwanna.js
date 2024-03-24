@@ -1,46 +1,4 @@
 
-// Color tools
-//https://blog.logrocket.com/how-to-manipulate-css-colors-with-javascript-fb547113a1b8/
-
-const rgbToLightness = (r, g, b) => {
-    return (Math.max(r, g, b) + Math.min(r, g, b)) * 0.5;
-}
-
-const rgbToSaturation = (r, g, b) => {
-    const L = rgbToLightness(r, g, b);
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    return (L === 0 || L === 1)
-        ? 0
-        : (max - min) / (1 - Math.abs(2 * L - 1));
-}
-
-const rgbToHue = (r, g, b) => {
-    let x = Math.sqrt(3) * (g - b);
-    let y = 2 * r - g - b;
-    return Math.round(Math.atan2(x, y,) * (180 / Math.PI));
-}
-
-const rgbToHsl = (r, g, b) => {
-    const lightness = rgbToLightness(r, g, b);
-    const saturation = rgbToSaturation(r, g, b);
-    const hue = rgbToHue(r, g, b);
-    return [hue, saturation, lightness];
-}
-
-const hslToRgb = (h, s, l) => {
-    const C = (1 - Math.abs(2 * l - 1)) * s;
-    const hPrime = h / 60;
-    const X = C * (1 - Math.abs(hPrime % 2 - 1));
-    const m = l - C / 2;
-    const withLight = (r, g, b) => `rgb(${Math.round(r + m)},${Math.round(g + m)},${Math.round(b + m)})`;
-    if (hPrime <= 1) { return withLight(C, X, 0); } else
-        if (hPrime <= 2) { return withLight(X, C, 0); } else
-            if (hPrime <= 3) { return withLight(0, C, X); } else
-                if (hPrime <= 4) { return withLight(0, X, C); } else
-                    if (hPrime <= 5) { return withLight(X, 0, C); } else
-                        if (hPrime <= 6) { return withLight(C, 0, X); }
-}
 
 const hex2rgb = c => {
     let result = `${c.match(/\w\w/g).map(x => +`0x${x}`)}`.split(',');
@@ -53,23 +11,21 @@ const hex2rgb = c => {
 
 const rgb2hex = c => '#' + c.match(/\d+/g).map(x => (+x).toString(16).padStart(2, 0)).join``;
 
-const rgbToObject = (red, green, blue) => {
-    const [hue, saturation, lightness] = rgbToHsl(red, green, blue);
-    return { red, green, blue, hue, saturation, lightness };
-}
+function setColors(hexColor,rot){
 
-const hslToObject = (hue, saturation, lightness) => {
-    const [red, green, blue] = hslToRgb(hue, saturation, lightness);
-    return { red, green, blue, hue, saturation, lightness };
-}
+    let rgb = hex2rgb(hexColor);
+    
+    let hslColor = RGBToHSL(rgb);
+  
+    hslColor.h = (hslColor.h + rot) % 360;
+  
+    rgb = HSLToRGB(hslColor);
 
-const rotateHue = (rotation, obj) => {
-    let hue = obj.hue;
-    const modulo = (x, n) => (x % n + n) % n;
-    const newHue = modulo(hue + rotation, 360);
-    obj.hue = newHue
-    return obj;
-}
+    rgb = `rgb(${Math.round(rgb.r)},${Math.round(rgb.g)},${Math.round(rgb.b)})`;
+
+    return rgb2hex(rgb);
+  
+  }
 
 let isRunning = false;
 
@@ -115,12 +71,14 @@ const rotation = rot;
 if (rotation > 0) {
     for (const [key, value] of Object.entries(colors)) {
         if (value.startsWith('#')) {
+/*
             let rgb = hex2rgb(value);
             let colorObj = rgbToObject(rgb.r, rgb.g, rgb.b);
             let rotatedObj = rotateHue(rotation, colorObj);
             rgb = hslToRgb(rotatedObj.hue, rotatedObj.saturation, rotatedObj.lightness);
             let hex = rgb2hex(rgb);
-            colors[key] = hex;
+*/
+            colors[key] = setColors(value,rotation);
         }
     }
 }
@@ -731,3 +689,79 @@ chrome.storage.sync.get('rotation', (result) => {
       });
       
 })
+
+
+function RGBToHSL(rgb) {
+    // Make r, g, and b fractions of 1
+   let r = rgb.r / 255;
+   let g = rgb.g / 255;
+   let b = rgb.b / 255;
+
+    // Find greatest and smallest channel values
+    let cmin = Math.min(r, g, b),
+        cmax = Math.max(r, g, b),
+        delta = cmax - cmin,
+        h = 0,
+        s = 0,
+        l = 0;
+
+    if (delta == 0)
+        h = 0;
+    // Red is max
+    else if (cmax == r)
+        h = ((g - b) / delta) % 6;
+    // Green is max
+    else if (cmax == g)
+        h = (b - r) / delta + 2;
+    // Blue is max
+    else
+        h = (r - g) / delta + 4;
+
+    h = Math.round(h * 60);
+
+    // Make negative hues positive behind 360°
+    if (h < 0) h += 360;
+    l = (cmax + cmin) / 2;
+
+    // Calculate saturation
+    s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+    // Multiply l and s by 100
+    s = +(s * 100).toFixed(1);
+    l = +(l * 100).toFixed(1);
+
+    return {h : h, s : s, l : l}
+}
+
+function HSLToRGB(hsl) {
+    // Must be fractions of 1
+   let s = hsl.s / 100;
+   let l = hsl.l / 100;
+   let h = hsl.h;
+
+    let c = (1 - Math.abs(2 * l - 1)) * s,
+        x = c * (1 - Math.abs((h / 60) % 2 - 1)),
+        m = l - c / 2,
+        r = 0,
+        g = 0,
+        b = 0;
+
+    if (0 <= h && h < 60) {
+        r = c; g = x; b = 0;
+    } else if (60 <= h && h < 120) {
+        r = x; g = c; b = 0;
+    } else if (120 <= h && h < 180) {
+        r = 0; g = c; b = x;
+    } else if (180 <= h && h < 240) {
+        r = 0; g = x; b = c;
+    } else if (240 <= h && h < 300) {
+        r = x; g = 0; b = c;
+    } else if (300 <= h && h < 360) {
+        r = c; g = 0; b = x;
+    }
+    r = Math.round((r + m) * 255);
+    g = Math.round((g + m) * 255);
+    b = Math.round((b + m) * 255);
+
+    return {r : r, g : g , b : b};
+}
