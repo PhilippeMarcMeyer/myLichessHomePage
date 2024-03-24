@@ -71,13 +71,6 @@ const rotation = rot;
 if (rotation > 0) {
     for (const [key, value] of Object.entries(colors)) {
         if (value.startsWith('#')) {
-/*
-            let rgb = hex2rgb(value);
-            let colorObj = rgbToObject(rgb.r, rgb.g, rgb.b);
-            let rotatedObj = rotateHue(rotation, colorObj);
-            rgb = hslToRgb(rotatedObj.hue, rotatedObj.saturation, rotatedObj.lightness);
-            let hex = rgb2hex(rgb);
-*/
             colors[key] = setColors(value,rotation);
         }
     }
@@ -568,6 +561,7 @@ if (challenges.length < 11) {
 
     `;
 }
+
 
 
 Add_Custom_Style(styleCss);
