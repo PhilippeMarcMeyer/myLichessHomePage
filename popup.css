@@ -68,28 +68,35 @@ h2{
     display:inline-block;
 }
 
-.btn{
-    margin : 0 100px 0 100px;
-    margin-top : 20px;
-    text-align: right;
+.btn-wrapper-left{
+    display : inline-block;
+    width: 30%;
+    margin : 20px 0 20px 50px;
 }
 
-.btn button{
+.btn-wrapper-right{
+    display : inline-block;
+    width: 30%;
+    margin : 20px 50px 20px 0;
+}
+
+.btn-wrapper button{
     background-color: rgba(255,255,255,0.3);
     color:white;
     padding : 8px 40px 8px 40px;
     border : 1px solid white;
     border-radius: 10px;
+    width : 120px;
 }
 
-.btn button:not([disabled]):hover{
+.btn-wrapper button:not([disabled]):hover{
     border: 1px solid #fff;
     background-color: #25374d;
     color: #ffffff;
   }
   
-  .btn  button:disabled,
-  .btn button[disabled]{
+  .btn-wrapper button:disabled,
+  .btn-wrapperbutton[disabled]{
     border: 1px solid #999;    
     background-color: rgba(255,255,255,0.1);
     color: #999;

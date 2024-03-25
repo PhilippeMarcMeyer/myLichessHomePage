@@ -105,9 +105,11 @@ if (hideChallengesElements) {
       x.checked = challenges.includes(x.getAttribute('data-target'));
     });
   });
-
-
 }
+
+document.querySelector('#cancelPopUp').addEventListener('click',() => {
+  window.close();
+});
 
 const closeElement = document.querySelector("#closePopUp");
 if(closeElement){
@@ -146,6 +148,9 @@ if(closeElement){
     // closing the window
     //--------------------------
     setTimeout(function(){
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.update(tabs[0].id, {url: tabs[0].url});
+    });
       window.close();
     },300)
    
