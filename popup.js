@@ -1,36 +1,59 @@
 'use strict';
 
+const version = 'v 1.1';
+const versionElement =document.getElementById('ext-version');
 const colorizedZone = document.getElementById('colorized-zone');
 const rotationElement = document.getElementById('rotation');
 const resultElement = document.getElementById('result');
+const saturationElement = document.getElementById('saturation');
+const saturationResult = document.getElementById('result-sat'); 
+const logoElement = document.getElementById('logoLichess');
 
-if (rotationElement && resultElement) {
+if(versionElement){
+  versionElement.innerHTML = version;
+}
+
+if (rotationElement && resultElement && saturationElement && saturationResult) {
   chrome.storage.sync.get('rotation', function (rotation) {
     rotationElement.value = rotation.rotation;
     resultElement.innerHTML = rotation.rotation;
     let rot = parseInt(rotation.rotation);
     rot = !isNaN(rot) ? rot : 0;
-    setColors(rot);
+    chrome.storage.sync.get('saturation', function (saturation) {
+      saturationElement.value = saturation.saturation;
+      saturationResult.innerHTML = saturation.saturation;
+      let sat = parseInt(saturation.saturation);
+      sat = !isNaN(sat) ? sat : 0;
+      setColors(rot,sat);
+    })
   })
 
   rotationElement.addEventListener('change', function (event) {
     let rot = event.target.value;
     resultElement.innerHTML = rot;
+    let sat = parseInt(saturationElement.value);
     rot = parseInt(rot);
-   // debounce(function () { setColors(rot) }, 5000);
-   setColors(rot);
-  })
+   setColors(rot,sat);
+  });
+
+  saturationElement.addEventListener('change', function (event) {
+    let sat = event.target.value;
+    saturationResult.innerHTML = sat;
+    let rot = parseInt(rotationElement.value);
+    sat = parseInt(sat);
+   setColors(rot,sat);
+  });
  
+  logoElement.addEventListener('click', function (event) {
+    saturationElement.value = 0;
+    rotationElement.value = 0;
+    saturationResult.innerHTML = '0';
+    resultElement.innerHTML = '0';
+    setColors(0,0);
+  });
 }
 
-function debounce(method, delay) {
-  clearTimeout(method._tId);
-  method._tId= setTimeout(function(){
-      method();
-  }, delay);
-}
-
-function setColors(rot){
+function setColors(rot,sat){
 
   let rgbColor1 = {r : 37, g : 55 , b : 77};
   let rgbColor2 = {r : 20, g : 35 , b : 49};
@@ -41,6 +64,9 @@ function setColors(rot){
   hslColor1.h = (hslColor1.h + rot) % 360;
   hslColor2.h = (hslColor2.h + rot) % 360;
 
+  hslColor1.s = (hslColor1.s + sat);
+  hslColor2.s = (hslColor2.s + sat);
+
   let rgb1 = HSLToRGB(hslColor1);
   let rgb2 = HSLToRGB(hslColor2);
 
@@ -50,11 +76,9 @@ function setColors(rot){
   colorizedZone.style.background = `linear-gradient(${rgbString1},${rgbString2})`;
 }
 
-
 const hideAreasElements = document.querySelectorAll(".hide-areas > input[type=checkbox]");
 
 if (hideAreasElements) {
-
   const defaultTargets = [
     'lobby__timeline',
     'lobby__leaderboard',
@@ -79,8 +103,6 @@ if (hideAreasElements) {
       x.checked = targets.includes(x.getAttribute('id'));
     });
   });
-
-
 }
 
 const hideChallengesElements = document.querySelectorAll(".hide-challenges > input[type=checkbox]");
@@ -121,6 +143,11 @@ if(closeElement){
     let rot = rotationElement.value;
     chrome.storage.sync.set({ "rotation": rot });
     //----------------------
+    // saving saturation
+    //----------------------
+    let sat = saturationElement.value;
+    chrome.storage.sync.set({ "saturation": sat });
+    //----------------------
     // saving areas to hide 
     //----------------------
     hideAreasElements.forEach((el) => {
@@ -147,12 +174,10 @@ if(closeElement){
     //--------------------------
     // closing the window
     //--------------------------
-    setTimeout(function(){
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.update(tabs[0].id, {url: tabs[0].url});
-    });
+
+    setTimeout(function () {
       window.close();
-    },300)
-   
+    }, 300)
+
   });
 }

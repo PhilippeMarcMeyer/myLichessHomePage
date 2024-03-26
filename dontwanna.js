@@ -11,21 +11,22 @@ const hex2rgb = c => {
 
 const rgb2hex = c => '#' + c.match(/\d+/g).map(x => (+x).toString(16).padStart(2, 0)).join``;
 
-function setColors(hexColor,rot){
+function setColors(hexColor, rot, sat) {
 
     let rgb = hex2rgb(hexColor);
-    
+
     let hslColor = RGBToHSL(rgb);
-  
+
     hslColor.h = (hslColor.h + rot) % 360;
-  
+    hslColor.s = (hslColor.s + sat);
+
     rgb = HSLToRGB(hslColor);
 
     rgb = `rgb(${Math.round(rgb.r)},${Math.round(rgb.g)},${Math.round(rgb.b)})`;
 
     return rgb2hex(rgb);
-  
-  }
+
+}
 
 let isRunning = false;
 
@@ -65,16 +66,18 @@ const colors = modelColors.filter((x) => {
 })[0].colors;
 
 
-const setModel = (rot, challenges) => {
-const rotation = rot;
+const setModel = (rot, sat, challenges) => {
 
-if (rotation > 0) {
-    for (const [key, value] of Object.entries(colors)) {
-        if (value.startsWith('#')) {
-            colors[key] = setColors(value,rotation);
+const rotation = rot;
+const saturation = sat;
+
+    if (rotation > 0 || saturation != 0) {
+        for (const [key, value] of Object.entries(colors)) {
+            if (value.startsWith('#')) {
+                colors[key] = setColors(value, rotation, saturation);
+            }
         }
     }
-}
 
 const Add_Custom_Style = css => document.head.appendChild(document.createElement("style")).innerHTML = css
 
@@ -562,8 +565,6 @@ if (challenges.length < 11) {
     `;
 }
 
-
-
 Add_Custom_Style(styleCss);
 }
 
@@ -626,13 +627,15 @@ const launchObserver = (challenges) => {
     observer.observe(document, { childList: true, subtree: true });
 };
 
-const init = (rot, targets, challenges) => {
-    setModel(rot, challenges)
+const init = (rot, sat, targets, challenges) => {
+    setModel(rot, sat, challenges)
     runOnce(targets, challenges);
     launchObserver(challenges);
 };
 
 chrome.storage.sync.get('rotation', (result) => {
+    let rot = 0;
+    let sat = 0;
     if (!result || result.rotation === undefined) {
         rot = 0;
         chrome.storage.sync.set({ rotation: 0 });
@@ -662,7 +665,7 @@ chrome.storage.sync.get('rotation', (result) => {
           });
         }
 
-        const defaultChallenges = ['1+0', '2+1', '3+0', '3+2'];
+        const defaultChallenges = [];
 
         let challenges = [];
 
@@ -677,11 +680,17 @@ chrome.storage.sync.get('rotation', (result) => {
                     challenges.push(x);
                 });
             }
-            init(rot, targets, challenges);
+            chrome.storage.sync.get('saturation', (result) => {
+                if (!result || result.saturation === undefined) {
+                    sat = 0;
+                    chrome.storage.sync.set({ saturation: 0 });
+                } else {
+                    sat = parseInt(result.saturation);
+                }
+                 init(rot, sat, targets, challenges);
+            });
         });
-
       });
-      
 })
 
 

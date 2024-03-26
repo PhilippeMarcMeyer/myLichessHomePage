@@ -8,6 +8,7 @@ I also hided some blocks of info on the main page and some challenge buttons (I'
 ----
 My Lichess Home page modifies the interface of lichess.org using the dark mode
 - Change colors at will by rotation the hue from 0 to 360°
+- Change colors at will by changing the % of saturation from - 35% to + 35%
 - Hide areas on the landing page, if you don't want to see them
 - Hide challenge speed you don't use
 
@@ -21,5 +22,7 @@ set your preferences in the popup window
 03/17/2024 : some challenge speeds may now be hidden in the lobby (landing page)
 
 03/20/2024 : new css as the syle of lichess has evolved
+
+03/26/2024 : v 1.1, added saturation modification 
 
 ![chromeStoreMlhp1](https://github.com/PhilippeMarcMeyer/myLichessHomePage/assets/2178299/19683570-52c8-447f-acfe-6ce31365d7f1)

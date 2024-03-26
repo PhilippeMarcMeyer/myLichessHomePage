@@ -11,9 +11,39 @@ input {
     margin-left: 6px;
 }
 
+#ext-version {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.saturation {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+}
+
+.saturation > span {
+    vertical-align: 18%;
+}
+
+#saturation {
+    width: 100px;
+    margin-top: 10px;
+}
+
+#rotation{
+    width:280px;
+    margin-top: 10px;
+}
+
 #logoLichess{
     width:96px;
     height:96px;
+}
+
+#logoLichess:hover {
+    cursor: pointer;
 }
 
 .container {
@@ -71,13 +101,13 @@ h2{
 .btn-wrapper-left{
     display : inline-block;
     width: 30%;
-    margin : 20px 0 20px 50px;
+    margin : 24px 0 10px 50px;
 }
 
 .btn-wrapper-right{
     display : inline-block;
     width: 30%;
-    margin : 20px 50px 20px 0;
+    margin : 24px 50px 10px 0;
 }
 
 .btn-wrapper button{
