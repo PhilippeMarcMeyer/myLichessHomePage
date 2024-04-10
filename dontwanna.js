@@ -99,6 +99,9 @@ body>header {
     background: ${colors.secondaryColor};
 }
 
+.rcontrols .suggestion, .rcontrols .pending, .rcontrols .question {
+    background: ${colors.secondaryColor};
+}
 
 .mselect__list>*:hover {
    background : ${colors.rgbaSoftWhite};
@@ -410,7 +413,7 @@ dialog {
     background: ${colors.primaryColor} !important;
 }
 
-input, textarea, select {
+input:not(.regular-checkbox), textarea, select {
     background: ${colors.formColor1}  !important;;
     border: 1px solid ${colors.formColor2}  !important;;
 }
@@ -545,6 +548,20 @@ group.radio label, group.radio .label {
     background: ${colors.primaryColor};
 }
 
+.button {
+    background: rgba(186, 186, 186, .05) !important;
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:5px;
+}
+
+.button.button-metal{
+    background: rgba(186, 186, 186, .05) !important;
+}
+
+.button:hover{
+    background: ${colors.secondaryColor} !important;
+}
+
 `;
 
 if (challenges.length >= 9) {
@@ -578,15 +595,6 @@ const runOnce = (targets, challenges) => {
     });
 
     const logo = `<img id='logoLichess' src="data:image/svg+xml,%3Csvg viewBox='-2 -2 54 54' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='${colors.logo}' stroke='${colors.logo}' stroke-linejoin='round'%0Ad='M38.956.5c-3.53.418-6.452.902-9.286 2.984C5.534 1.786-.692 18.533.68 29.364 3.493 50.214 31.918 55.785 41.329 41.7c-7.444 7.696-19.276 8.752-28.323 3.084C3.959 39.116-.506 27.392 4.683 17.567 9.873 7.742 18.996 4.535 29.03 6.405c2.43-1.418 5.225-3.22 7.655-3.187l-1.694 4.86 12.752 21.37c-.439 5.654-5.459 6.112-5.459 6.112-.574-1.47-1.634-2.942-4.842-6.036-3.207-3.094-17.465-10.177-15.788-16.207-2.001 6.967 10.311 14.152 14.04 17.663 3.73 3.51 5.426 6.04 5.795 6.756 0 0 9.392-2.504 7.838-8.927L37.4 7.171z'/%3E%3C/svg%3E%0A"></img>`;
-
-    let target = document.querySelectorAll('.button');
-    if (target) {
-        target.forEach((x) => {
-            x.style.border = '1px solid rgba(255,255,255,0.1)';
-            x.borderRadius = '10px';
-            x.style.background = 'rgba(255,255,255,0.1)'
-        });
-    }
 
     if (targets.includes('lobby__timeline')) {
         target = document.querySelector('.lobby__timeline');
