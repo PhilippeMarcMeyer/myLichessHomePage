@@ -562,6 +562,10 @@ group.radio label, group.radio .label {
     background: ${colors.secondaryColor} !important;
 }
 
+.analyse__tools index, .analyse__tools .result, .analyse__tools .status {
+    background: ${colors.secondaryColor} !important;
+}
+
 `;
 
 if (challenges.length >= 9) {
