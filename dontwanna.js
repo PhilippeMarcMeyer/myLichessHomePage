@@ -79,7 +79,7 @@ const saturation = sat;
         }
     }
 
-const Add_Custom_Style = css => document.head.appendChild(document.createElement("style")).innerHTML = css
+const Add_Custom_Style = css => document.head.appendChild(document.createElement("style")).innerHTML = css;
 
 let styleCss = `
 body {
@@ -332,7 +332,7 @@ body>header {
 }
 
 .lpools > div:hover{
-    background: ${colors.secondaryColor};
+    background: ${colors.secondaryColor} !important;
 }
 
 .button:hover{
@@ -564,6 +564,18 @@ group.radio label, group.radio .label {
 
 .analyse__tools index, .analyse__tools .result, .analyse__tools .status {
     background: ${colors.secondaryColor} !important;
+}
+
+.team-show__forum__post:nth-child(odd) {
+    background: ${colors.secondaryColor};
+}
+
+.video .card .reveal, .video .card .info {
+    background: ${colors.secondaryColor};
+}
+
+.slist-invert tbody tr:nth-child(odd) {
+    background: transparent;
 }
 
 `;
