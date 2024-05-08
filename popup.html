@@ -12,55 +12,96 @@
 <body>
 	<div class="container" id="colorized-zone" style="background: linear-gradient(hsl(213,35%,22%),hsl(209,42%,14%));">
 		<span id="ext-version"></span>
-		<div class="saturation">
-			<label for="saturation">Color saturation : <span id="result-sat">0</span> % </label><br/>
-			<span>-35</span>
-				<input type="range" id="saturation" min="-35" max="35" step="1" value="0">
-			<span>+35</span>
-		</div>
-		<div class="sub">
-			<img id='logoLichess' src="data:image/svg+xml,%3Csvg viewBox='-2 -2 54 54' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='silver' stroke='silver' stroke-linejoin='round'%0Ad='M38.956.5c-3.53.418-6.452.902-9.286 2.984C5.534 1.786-.692 18.533.68 29.364 3.493 50.214 31.918 55.785 41.329 41.7c-7.444 7.696-19.276 8.752-28.323 3.084C3.959 39.116-.506 27.392 4.683 17.567 9.873 7.742 18.996 4.535 29.03 6.405c2.43-1.418 5.225-3.22 7.655-3.187l-1.694 4.86 12.752 21.37c-.439 5.654-5.459 6.112-5.459 6.112-.574-1.47-1.634-2.942-4.842-6.036-3.207-3.094-17.465-10.177-15.788-16.207-2.001 6.967 10.311 14.152 14.04 17.663 3.73 3.51 5.426 6.04 5.795 6.756 0 0 9.392-2.504 7.838-8.927L37.4 7.171z'/%3E%3C/svg%3E%0A"></img>
-		</div>
-		<h2>My lichess homepage</h2>
+		<div class="menu-zones"><span data-id="colors-zone" class="chosen">Colors</span><span data-id="bots-zone">Bots</span><span data-id="friends-zone">Friends</span></div>
+		<div id="colors-zone" class="zone chosen">
+			<div class="saturation">
+				<label for="saturation">Color saturation : <span id="result-sat">0</span> % </label><br/>
+				<span>-35</span>
+					<input type="range" id="saturation" min="-35" max="35" step="1" value="0">
+				<span>+35</span>
+			</div>
+			<div class="sub">
+				<img id='logoLichess' src="data:image/svg+xml,%3Csvg viewBox='-2 -2 54 54' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='silver' stroke='silver' stroke-linejoin='round'%0Ad='M38.956.5c-3.53.418-6.452.902-9.286 2.984C5.534 1.786-.692 18.533.68 29.364 3.493 50.214 31.918 55.785 41.329 41.7c-7.444 7.696-19.276 8.752-28.323 3.084C3.959 39.116-.506 27.392 4.683 17.567 9.873 7.742 18.996 4.535 29.03 6.405c2.43-1.418 5.225-3.22 7.655-3.187l-1.694 4.86 12.752 21.37c-.439 5.654-5.459 6.112-5.459 6.112-.574-1.47-1.634-2.942-4.842-6.036-3.207-3.094-17.465-10.177-15.788-16.207-2.001 6.967 10.311 14.152 14.04 17.663 3.73 3.51 5.426 6.04 5.795 6.756 0 0 9.392-2.504 7.838-8.927L37.4 7.171z'/%3E%3C/svg%3E%0A"></img>
+			</div>
+			<h2>My lichess homepage</h2>
 
-		<div class="sub rotation">
-			<label for="rotation">Color rotation : <span id="result"></span> to 360°</label><br/>
-			<input type="range" id="rotation" min="0" max="360" step="1" value="0">
-	    </div>
-		<h3>Areas to hide </h3>
-		<div class="sub hide-areas">
-			<input type="checkbox" id="lobby__timeline"><label for="lobby__timeline">lobby timeline</label>
-			<input type="checkbox" id="lobby__leaderboard"><label for="lobby__leaderboard">lobby leaderboard</label><br/>
-			<input type="checkbox" id="lobby__winners"><label for="lobby__winners">lobby winners</label>
-			<input type="checkbox" id="lobby__wide-winners"><label for="lobby__wide-winners">lobby wide winners</label><br/>
-			<input type="checkbox" id="lobby__simuls"><label for="lobby__simuls">lobby simuls</label>
-			<input type="checkbox" id="lobby__tv"><label for="lobby__tv">lobby TV</label><br/>
-			<input type="checkbox" id="lobby__blog"><label for="lobby__blog">lobby blog</label>
-			<input type="checkbox" id="lobby__puzzle"><label for="lobby__puzzle">lobby puzzle</label><br/>
-			<input type="checkbox" id="lobby__feed"><label for="lobby__feed">lobby feed</label>
-			<input type="checkbox" id="lobby__tournaments"><label for="lobby__tournaments">lobby tournaments</label><br/>
-	    </div>
-		<h3>Challenges to hide </h3>
-		<div class="sub hide-challenges">
-			<input type="checkbox" data-target="1+0"><label>1+0</label>
-			<input type="checkbox" data-target="2+1"><label>2+1</label>
-			<input type="checkbox" data-target="3+0"><label>3+0</label>
-			<input type="checkbox" data-target="3+2"><label>3+2</label><br/>
-			<input type="checkbox" data-target="5+0"><label>5+0</label>
-			<input type="checkbox" data-target="5+3"><label>5+3</label>
-			<input type="checkbox" data-target="10+0"><label>10+0</label>
-			<input type="checkbox" data-target="10+5"><label>10+5</label><br/>
-			<input type="checkbox" data-target="15+10"><label>15+10</label>
-			<input type="checkbox" data-target="30+0"><label>30+0</label>
-			<input type="checkbox" data-target="30+20"><label>30+20</label>
-	    </div>
+			<div class="sub rotation">
+				<label for="rotation">Color rotation : <span id="result"></span> to 360°</label><br/>
+				<input type="range" id="rotation" min="0" max="360" step="1" value="0">
+			</div>
+			<h3>Areas to hide </h3>
+			<div class="sub hide-areas">
+				<input type="checkbox" id="lobby__timeline"><label for="lobby__timeline">lobby timeline</label>
+				<input type="checkbox" id="lobby__leaderboard"><label for="lobby__leaderboard">lobby leaderboard</label><br/>
+				<input type="checkbox" id="lobby__winners"><label for="lobby__winners">lobby winners</label>
+				<input type="checkbox" id="lobby__wide-winners"><label for="lobby__wide-winners">lobby wide winners</label><br/>
+				<input type="checkbox" id="lobby__simuls"><label for="lobby__simuls">lobby simuls</label>
+				<input type="checkbox" id="lobby__tv"><label for="lobby__tv">lobby TV</label><br/>
+				<input type="checkbox" id="lobby__blog"><label for="lobby__blog">lobby blog</label>
+				<input type="checkbox" id="lobby__puzzle"><label for="lobby__puzzle">lobby puzzle</label><br/>
+				<input type="checkbox" id="lobby__feed"><label for="lobby__feed">lobby feed</label>
+				<input type="checkbox" id="lobby__tournaments"><label for="lobby__tournaments">lobby tournaments</label><br/>
+			</div>
+			<h3>Challenges to hide </h3>
+			<div class="sub hide-challenges">
+				<input type="checkbox" data-target="1+0"><label>1+0</label>
+				<input type="checkbox" data-target="2+1"><label>2+1</label>
+				<input type="checkbox" data-target="3+0"><label>3+0</label>
+				<input type="checkbox" data-target="3+2"><label>3+2</label><br/>
+				<input type="checkbox" data-target="5+0"><label>5+0</label>
+				<input type="checkbox" data-target="5+3"><label>5+3</label>
+				<input type="checkbox" data-target="10+0"><label>10+0</label>
+				<input type="checkbox" data-target="10+5"><label>10+5</label><br/>
+				<input type="checkbox" data-target="15+10"><label>15+10</label>
+				<input type="checkbox" data-target="30+0"><label>30+0</label>
+				<input type="checkbox" data-target="30+20"><label>30+20</label>
+			</div>
+
+		</div>	
+		<div class="zone" id="bots-zone">
+			<div class="zone-wrapper">
+				<h2><input type="checkbox" id="doFilter"> Filter the bots by ratings</h2>
+				<label for="fromRating">From</label>
+				<input type="number" id="fromRating" min="0" max="3600" step="50" disabled>
+				
+				<label for="toRating">to</label>
+				<input type="number" id="toRating" min="0" max="3600" step="50" disabled>
+				<br/>
+				<h3 id="noLocalStorageBots" class="noLocalStorageError hidden">LocaleStorage is not set or available on this browser</h3>
+			</div>
+		</div>
+		<div class="zone" id="friends-zone">
+			<div class="zone-wrapper">
+				<h2>Adding a small note to friends names</h2>
+				<br/>
+				<div id="friends-liste">
+					<table>
+						<thead>
+						<tr>
+							<th>Pseudo</th>
+							<th>Note</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+						<tbody>
+							<tr>
+								<td><input type="text" id="pseudo"/></td>
+								<td><input type="text" id="note"/></td>
+								<td id="action">Add</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 		<div class="btn-wrapper btn-wrapper-left">
 			<Button class="btn-left" id="cancelPopUp">Cancel</Button>
 		</div>	
 		<div class="btn-wrapper btn-wrapper-right">
 			<Button class="btn-right" id="closePopUp">OK</Button>
 		</div>
-		
+	</div>
+
 	<script src="colors.js"></script>
 	<script src="popup.js"></script>
 </body>

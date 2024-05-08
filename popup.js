@@ -1,13 +1,176 @@
 'use strict';
 
-const version = 'v 1.1';
-const versionElement =document.getElementById('ext-version');
+const version = 'v 1.3';
+const versionElement = document.getElementById('ext-version');
 const colorizedZone = document.getElementById('colorized-zone');
 const rotationElement = document.getElementById('rotation');
 const resultElement = document.getElementById('result');
 const saturationElement = document.getElementById('saturation');
-const saturationResult = document.getElementById('result-sat'); 
+const saturationResult = document.getElementById('result-sat');
 const logoElement = document.getElementById('logoLichess');
+
+const menuZones = document.querySelectorAll('.menu-zones span');
+const zones = document.querySelectorAll('.zone');
+menuZones
+  .forEach((x) => {
+    x.addEventListener('click', function () {
+      menuZones
+        .forEach((x) => {
+          x.classList = '';
+        });
+
+      zones
+        .forEach((x) => {
+          x.classList = 'zone';
+        });
+
+      this.classList = 'chosen';
+      let dataId = this.getAttribute('data-id');
+      document.getElementById(dataId).classList = 'zone chosen';
+    })
+  });
+
+// lichessFriends
+let lichessFriends = {};
+let friendsTable = document.querySelector('#friends-liste table');
+chrome.storage.sync.get('lichessFriends', (result) => {
+  if (result && result.lichessFriends !== undefined) {
+    lichessFriends = JSON.parse(result.lichessFriends);
+  }
+  setFriendsTable();
+  addNewNoteListener();
+});
+
+// Set the lichessFriends form
+
+function setFriendsTable() {
+  for (const property in lichessFriends) {
+    let newRow = friendsTable.insertRow(-1);
+
+    let newCell = newRow.insertCell(0);
+    let newText = document.createTextNode(property);
+    newCell.appendChild(newText);
+
+    newCell = newRow.insertCell(1);
+    newText = document.createTextNode(lichessFriends[property]);
+    newCell.appendChild(newText);
+
+    let newCell2 = newRow.insertCell(2);
+    newText = document.createTextNode('Suppr');
+    newCell2.appendChild(newText);
+
+    newCell2.addEventListener('click',function(){
+        let clickedRow = this.closest('tr');
+        let toDeletePseudo = clickedRow.cells[0].innerHTML;
+        for (let i = friendsTable.tBodies[0].rows.length-1; i > 0 ; i--) {
+          let currentPseudo = friendsTable.tBodies[0].rows[i].cells[0].innerHTML;
+          if(currentPseudo === toDeletePseudo){
+            delete lichessFriends[toDeletePseudo];
+          }
+        }
+        clickedRow.remove();
+    });
+  }
+}
+
+function addNewNoteListener() {
+  document.getElementById('action').addEventListener('click', function () {
+    let ptrToPseudo = document.getElementById('pseudo');
+    let ptrToNote = document.getElementById('note');
+    if (ptrToPseudo.value.trim() !== '' && ptrToNote !== '') {
+      let newPseudo = ptrToPseudo.value.trim();
+      let newNote = ptrToNote.value.replace('"', "'");
+      if (lichessFriends[newPseudo]) {
+        // If already in table replace it
+        for (let i = 1; i <= friendsTable.tBodies[0].rows.length-1; i++) {
+          let currentPseudo = friendsTable.tBodies[0].rows[i].cells[0].innerHTML;
+          if(currentPseudo === newPseudo){
+            friendsTable.tBodies[0].rows[i].cells[1].innerHTML = newNote;
+          }
+        }
+      } else {
+        //add it at the bottom
+        let newRow = friendsTable.insertRow(-1);
+
+        let newCell = newRow.insertCell(0);
+        let newText = document.createTextNode(newPseudo);
+        newCell.appendChild(newText);
+
+        newCell = newRow.insertCell(1);
+        newText = document.createTextNode(newNote);
+        newCell.appendChild(newText);
+
+        let newCell2 = newRow.insertCell(2);
+        newText = document.createTextNode('Suppr');
+        newCell2.setAttribute('class','supprBtn');
+        newCell2.appendChild(newText);
+        newCell2.addEventListener('click',function(){
+          let clickedRow = this.closest('tr');
+          let toDeletePseudo = clickedRow.cells[0].innerHTML;
+          for (let i = friendsTable.tBodies[0].rows.length-1; i > 0 ; i--) {
+            let currentPseudo = friendsTable.tBodies[0].rows[i].cells[0].innerHTML;
+            if(currentPseudo === toDeletePseudo){
+               delete lichessFriends[toDeletePseudo];
+            }
+          }
+          clickedRow.remove();
+      });
+    
+      }
+      lichessFriends[newPseudo] = newNote;
+    }
+  });
+}
+
+// filterBotsParams form
+let filterBotsParams = {
+  doFilter: false,
+  filterFrom: null,
+  filterTo: null
+}
+
+const doFilterElement = document.getElementById('doFilter');
+const fromFilterElement = document.getElementById('fromRating');
+const toFilterElement = document.getElementById('toRating');
+
+if (doFilterElement && fromFilterElement && toFilterElement) {
+  chrome.storage.sync.get('mlhpFilterBots', (result) => {
+    if (result && result.mlhpFilterBots !== undefined) {
+      filterBotsParams = JSON.parse(result.mlhpFilterBots);
+    }
+    // Set the filterBotsParams form
+    document.getElementById('noLocalStorageBots').classList = 'noLocalStorageError hidden';
+
+    if (filterBotsParams.doFilter) {
+      doFilterElement.checked = true;
+      fromFilterElement.disabled = false;
+      toFilterElement.disabled = false;
+      fromFilterElement.value = filterBotsParams.filterFrom;
+      toFilterElement.value = filterBotsParams.filterTo;
+    } else {
+      doFilterElement.checked = false;
+      fromFilterElement.disabled = true;
+      toFilterElement.disabled = true;
+      fromFilterElement.value = null;
+      toFilterElement.value = null;
+    }
+  });
+
+  // Listen to interactions in the filterBotsParams form
+  doFilterElement.addEventListener('change', function () {
+    if (this.checked) {
+      fromFilterElement.disabled = false;
+      toFilterElement.disabled = false;
+      fromFilterElement.value = filterBotsParams.filterFrom || 1000;
+      toFilterElement.value = filterBotsParams.filterTo || 2700;
+    } else {
+      fromFilterElement.disabled = true;
+      toFilterElement.disabled = true;
+      fromFilterElement.value = null;
+      toFilterElement.value = null;
+    }
+  });
+} 
 
 if(versionElement){
   versionElement.innerHTML = version;
@@ -172,6 +335,19 @@ if(closeElement){
         chrome.storage.sync.set({ "hideChallenges": checkedOnes });
     });
     //--------------------------
+    // saving bots filtering params 
+    //--------------------------
+      let lichessFilterBots = {
+        doFilter : doFilterElement.checked,
+        filterFrom : fromFilterElement.value,
+        filterTo : toFilterElement.value
+      }
+      chrome.storage.sync.set({ "mlhpFilterBots": JSON.stringify(lichessFilterBots) });
+    //--------------------------
+    // saving friends notes
+    //--------------------------
+    chrome.storage.sync.set({ "lichessFriends": JSON.stringify(lichessFriends) });
+    //--------------------------
     // closing the window
     //--------------------------
 
@@ -181,3 +357,4 @@ if(closeElement){
 
   });
 }
+

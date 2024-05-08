@@ -25,4 +25,6 @@ set your preferences in the popup window
 
 03/26/2024 : v 1.1, added saturation modification 
 
+08/05/2024 : v 1.3, added bots list filtering by rating range + notes on friends
+
 ![chromeStoreMlhp1](https://github.com/PhilippeMarcMeyer/myLichessHomePage/assets/2178299/19683570-52c8-447f-acfe-6ce31365d7f1)
