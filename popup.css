@@ -11,6 +11,11 @@ input {
     margin-left: 6px;
 }
 
+input[type=text]{
+    vertical-align: -5%;
+    margin-left: 0px;
+}
+
 .zone{
     display : none;
     min-height : 452px;
@@ -56,6 +61,11 @@ input {
     top: 80px;
 }
 
+#friends-liste {
+    overflow-y: scroll;
+    height: 312px;
+}
+
 #action{
     background-color: rgba(255, 255, 255, 0.2);
     cursor: pointer;
@@ -70,10 +80,14 @@ input {
 
 #friends-zone table{
     margin-left : 20px;
+    border:1px solid white;
+    text-align: left;
+    line-height: 2;
+    background-color: rgba(255,255,255,0.1);
 }
 
-#friends-zone td,th{
-    border : 1px solid white;
+#friends-zone table tr:nth-child(even) {
+    background-color: rgba(255,255,224,0.1);
 }
 
 #pseudo{
