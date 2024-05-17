@@ -629,14 +629,57 @@ const run = (challenges) => {
     // Hide bullets and 3 minutes blitz
     isRunning = true;
     let target = document.querySelector('.lobby__app__content.lpools');
-    if (target) {
+    if (target && !target.classList.contains('mlhp')) {
+        target.classList.add('mlhp')
         if (target.style.gridTemplateRows !== 'none') target.style.gridTemplateRows = 'none';
         if (target.style.background !== 'transparent') target.style.background = 'transparent';
-        challenges.forEach((x) => {
-            let subTarget = target.querySelector(`[data-id='${x}']`);
-            if (subTarget) {
-                if (subTarget.style.display !== 'none') subTarget.style.display = 'none';
+        let allChallenges = target.querySelectorAll('div [role="button"]');
+        allChallenges.forEach((challengeButton) => {
+            let currentChallenge = challengeButton.getAttribute('data-id');
+            if (currentChallenge) {
+                if (challenges.includes(currentChallenge)) {
+                    challengeButton.style.display = 'none';
+                } else {
+                
+                    let dataIcon = null;
+                    switch (currentChallenge) {
+                        case '1+0':
+                        case '2+1':
+                            dataIcon = '';
+                            break;
+                        case '3+0':
+                        case '3+2':
+                        case '5+0':
+                        case '5+3':
+                            dataIcon = '';
+                            break;
+                        case '10+0':
+                        case '10+5':
+                        case '15+10':
+                            dataIcon = '';
+                            break;
+                        case '30+0':
+                        case '30+20':
+                            dataIcon = '';
+                            break;
+                    }
+                    if (dataIcon !== null && !challengeButton.getAttribute('data-icon')) {
+                        challengeButton.setAttribute('data-icon', dataIcon);
+                        challengeButton.style.fontSize = '48px';
+                        challengeButton.style.color = '#bf811d';
+                        challengeButton.style.opacity = '0.8';
+                        let clock = challengeButton.querySelector('.clock');
+                        if (clock) {
+                            clock.style.fontSize = '20px';
+                            clock.style.color = '#fff';
+                        }
+                        let perf = challengeButton.querySelector('.perf');
+                        if (perf) perf.style.display = 'none';
+                    }
+                }
+
             }
+
         });
     }
 
@@ -645,16 +688,19 @@ const run = (challenges) => {
 
 const launchObserver = (challenges, filterBotsParams) => {
     const observer = new MutationObserver((mutations) => {
-        let target = document.querySelector('.lobby__app');
 
-        if (!isRunning && target) run(challenges);
+        if (!isRunning) run(challenges);
         setTimeout(function(){
             displayFriendsNotes();
-        },3000);
+        },1000);
+        
         if(window.location.pathname === '/player/bots') {
             if(filterBotsParams.doFilter){
                 filterBots(filterBotsParams.filterFrom,filterBotsParams.filterTo);
             }  
+        }
+        if (window.location.pathname.includes('/following')) {
+            displayFriendsNotesInFollowingPage();
         }
 
     });
@@ -671,6 +717,10 @@ const init = (rot, sat, targets, challenges) => {
     setModel(rot, sat, challenges)
     runOnce(targets, challenges);
     launchObserver(challenges,filterBotsParams);
+    setTimeout(function(){
+        displayFriendsNotesInFriendPage();
+    },1000);
+
 };
 
 chrome.storage.sync.get('rotation', (result) => {
@@ -809,7 +859,7 @@ function HSLToRGB(hsl) {
     return {r : r, g : g , b : b};
 }
 
-function displayFriendsNotes() {
+function displayFriendsNotes() { // on hover on the name of playes in games
     if (!lichessFriends) return;
     let friendZones = document.querySelectorAll('a.user-link:not(.ulpt)');
     if (!friendZones) return;
@@ -829,6 +879,53 @@ function displayFriendsNotes() {
             }
         }
     });
+} 
+
+function displayFriendsNotesInFollowingPage() { // on hover on the name of playes in games
+    if (!lichessFriends) return;
+    if (!window.location.pathname.includes('/following')) return;
+    let friendZones = document.querySelectorAll('a.user-link');
+    if (!friendZones) return;
+    friendZones.forEach((x) => {
+        let name = x.getAttribute('href');
+        if (name) {
+            name = name.substring(3);
+            if (lichessFriends[name]) {
+                if (!x.innerHTML.includes(':')) {
+                    x.innerHTML += ` :<br/>${lichessFriends[name]}`;
+                    x.style += ';white-space: break-spaces;'
+                }
+            }
+        }
+    });
+} 
+
+
+function displayFriendsNotesInFriendPage() { // on hover on the name of playes in games
+    let loc = window.location.pathname;
+    let offset = -1;
+    let keys = Object.keys(lichessFriends);
+
+    for (let i = 0; i < keys.length;i++){
+       if (loc.endsWith(`/${keys[i]}`)){
+        offset = i;
+        break;
+       }
+    }
+
+    if(offset > -1){
+        let friendZone = document.querySelector('span.user-link');
+        if (!friendZone) return;
+        let noteZone = friendZone.querySelector('#mlhp-note');
+        if(noteZone) return;
+        noteZone = document.createElement("div");
+        noteZone.setAttribute('id','mlhp-note');
+        noteZone.style.fontSize = '16px';
+        noteZone.style.position = 'absolute';
+        noteZone.style.top = '6px';
+        noteZone.appendChild(document.createTextNode(lichessFriends[keys[offset]]));
+        friendZone.appendChild(noteZone);
+    }
 } 
 
 function getFriendsList() {

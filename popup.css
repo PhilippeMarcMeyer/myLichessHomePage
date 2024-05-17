@@ -63,7 +63,7 @@ input[type=text]{
 
 #friends-liste {
     overflow-y: scroll;
-    height: 312px;
+    height: 288px;
 }
 
 #action{
@@ -106,7 +106,15 @@ input[type=text]{
 }
 
 .zone-wrapper h2{
-    margin-bottom : 20px;
+    margin-bottom : 16px;
+}
+
+.zone-wrapper i {
+    margin-left: 20px;
+    width: 100%;
+    display: inline-block;
+    text-align: left;
+    margin-bottom: 6px;
 }
 
 #bots-zone label {

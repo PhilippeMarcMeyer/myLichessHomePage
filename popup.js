@@ -118,6 +118,8 @@ function addNewNoteListener() {
     
       }
       lichessFriends[newPseudo] = newNote;
+      ptrToPseudo.value = '';
+      ptrToNote.value = '';
     }
   });
 }
@@ -139,8 +141,6 @@ if (doFilterElement && fromFilterElement && toFilterElement) {
       filterBotsParams = JSON.parse(result.mlhpFilterBots);
     }
     // Set the filterBotsParams form
-    document.getElementById('noLocalStorageBots').classList = 'noLocalStorageError hidden';
-
     if (filterBotsParams.doFilter) {
       doFilterElement.checked = true;
       fromFilterElement.disabled = false;
