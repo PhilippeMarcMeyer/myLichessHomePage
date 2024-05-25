@@ -48,6 +48,34 @@ input[type=text]{
     background-color: rgba(255, 255, 255, 1);
 }
 
+table { border-collapse: collapse; }
+
+tr, td { padding: 0; }
+
+td.litterbin{
+    font-size: 22px;
+    text-align: center;
+    color:red;
+    background-color:rgba(255,0,0,0.1);
+}
+
+.header-bottom{
+    border-bottom: 1px solid white;
+    padding-bottom: 6px;
+}
+
+td div { padding: 2px 6px 2px 6px; }
+
+td div span img{
+    width: 50px;
+}
+
+td#action{
+    font-size: 22px;
+    text-align: center;
+    color:greenyellow;
+}
+
 .menu-zones span:hover:not(.chosen){
     border-color: rgba(255, 255, 255, 0.8);
     color : rgba(255, 255, 255, 0.8);
@@ -63,7 +91,25 @@ input[type=text]{
 
 #friends-liste {
     overflow-y: scroll;
-    height: 288px;
+    height: 340px;
+}
+
+#friends-liste td.tdWithImage{
+    background-size: 50px;
+    background-repeat:no-repeat;
+}
+
+.pseudoLichess{
+    cursor : pointer;
+}
+
+.pseudoLichess:hover{
+    color : greenyellow;
+}
+
+#friends-liste td.tdWithImage div{
+    opacity:0.8;
+    padding-left: 60px;
 }
 
 #action{
@@ -79,23 +125,34 @@ input[type=text]{
 }
 
 #friends-zone table{
-    margin-left : 20px;
+    margin-left :10px;
     border:1px solid white;
     text-align: left;
     line-height: 2;
+    width:95%;
     background-color: rgba(255,255,255,0.1);
 }
+
+#friends-zone table td label{
+    min-width: 44px;
+    display: inline-block;
+}
+
 
 #friends-zone table tr:nth-child(even) {
     background-color: rgba(255,255,224,0.1);
 }
 
 #pseudo{
-    width:100px;
+    width:60px;
 }
 
 #note {
-    width: 300px;
+    width: 266px;
+}
+
+#image {
+    width: 390px;
 }
 
 #bots-zone .zone-wrapper {

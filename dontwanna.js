@@ -27,6 +27,7 @@ function setColors(hexColor, rot, sat) {
     return rgb2hex(rgb);
 
 }
+let friendsPhotos = {};
 
 let isRunning = false;
 
@@ -699,10 +700,14 @@ const launchObserver = (challenges, filterBotsParams) => {
                 filterBots(filterBotsParams.filterFrom,filterBotsParams.filterTo);
             }  
         }
+
         if (window.location.pathname.includes('/following')) {
             displayFriendsNotesInFollowingPage();
         }
 
+        if(window.location.pathname.startsWith('/inbox')){
+            displayFriendsNotesInFriendPage();
+        }
     });
     observer.observe(document, { childList: true, subtree: true ,childList : true});
 };
@@ -905,26 +910,61 @@ function displayFriendsNotesInFriendPage() { // on hover on the name of playes i
     let loc = window.location.pathname;
     let offset = -1;
     let keys = Object.keys(lichessFriends);
-
+    let isFriendPage = true; // Profile
     for (let i = 0; i < keys.length;i++){
        if (loc.endsWith(`/${keys[i]}`)){
         offset = i;
         break;
        }
     }
+    if(loc.startsWith('/inbox')){
+        isFriendPage = false;
+    }
 
+//inbox
     if(offset > -1){
-        let friendZone = document.querySelector('span.user-link');
+        let friendZone = isFriendPage ? document.querySelector('span.user-link') : document.querySelector('.msg-app__convo__head__left > a.user-link');
         if (!friendZone) return;
+        if(!isFriendPage) friendZone = friendZone.parentElement;
         let noteZone = friendZone.querySelector('#mlhp-note');
         if(noteZone) return;
         noteZone = document.createElement("div");
         noteZone.setAttribute('id','mlhp-note');
-        noteZone.style.fontSize = '16px';
-        noteZone.style.position = 'absolute';
-        noteZone.style.top = '6px';
+        if(isFriendPage){
+            noteZone.style.fontSize = '16px';
+            noteZone.style.position = 'absolute';
+            noteZone.style.top = '6px';
+        }else{
+            noteZone.style.padding = '5px 5px 5px 30px';
+        }
+
         noteZone.appendChild(document.createTextNode(lichessFriends[keys[offset]]));
         friendZone.appendChild(noteZone);
+// not to be publish nor stored to github
+        let photoUrl = null;
+        if(friendsPhotos[keys[offset]]){
+            photoUrl = friendsPhotos[keys[offset]];
+        }
+        if(photoUrl){
+           let photoZone = isFriendPage ? document.querySelector('.box__top.user-show__header') : friendZone;
+           if(photoZone){
+              let photoDiv = document.createElement("div");
+              photoDiv.classList = 'user-infos';
+              let photoDiv2 = document.createElement("div");
+              photoDiv2.id = 'userImage';
+              photoDiv2.style = isFriendPage ? 'width:140px;position: absolute;right: 5px;top: 152px;' : 'width:70px;position:absolute;left:2px;';
+              photoDiv2.innerHTML = `<img src="${photoUrl}" style="width: 100%;">`
+              photoDiv.appendChild(photoDiv2);
+              photoZone.appendChild(photoDiv);
+              if(!isFriendPage) photoZone.style = 'position: relative;width: 100%;padding-left: 75px;';
+              if(isFriendPage) {
+                let bioZone = document.querySelector('div.user-infos p.bio');
+                if(bioZone){
+                    bioZone.style = 'max-width:200px;min-height:70px;'
+                }
+              }
+           }
+        }
     }
 } 
 
@@ -934,7 +974,14 @@ function getFriendsList() {
             lichessFriends = JSON.parse(result.lichessFriends);
         }
     });
+    chrome.storage.sync.get('friendsPhotos', (result) => {
+        if (result && result.friendsPhotos !== undefined) {
+            friendsPhotos = JSON.parse(result.friendsPhotos);
+        }
+    });
+    
 }
+
 
 function getFilterBotsParams() {
     chrome.storage.sync.get('mlhpFilterBots', (result) => {

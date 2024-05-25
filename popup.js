@@ -8,6 +8,9 @@ const resultElement = document.getElementById('result');
 const saturationElement = document.getElementById('saturation');
 const saturationResult = document.getElementById('result-sat');
 const logoElement = document.getElementById('logoLichess');
+const ptrToPseudo = document.getElementById('pseudo');
+const ptrToNote = document.getElementById('note');
+const ptrToImage= document.getElementById('image');
 
 const menuZones = document.querySelectorAll('.menu-zones span');
 const zones = document.querySelectorAll('.zone');
@@ -32,13 +35,38 @@ menuZones
 
 // lichessFriends
 let lichessFriends = {};
+let friendsPhotos = {};
+
 let friendsTable = document.querySelector('#friends-liste table');
 chrome.storage.sync.get('lichessFriends', (result) => {
   if (result && result.lichessFriends !== undefined) {
     lichessFriends = JSON.parse(result.lichessFriends);
+    chrome.storage.sync.get('friendsPhotos', (result) => {
+      if (result && result.friendsPhotos !== undefined) {
+        friendsPhotos = JSON.parse(result.friendsPhotos);
+      }
+      setFriendsTable();
+      addNewNoteListener();
+      friendsTable.addEventListener('click', (e) => {
+        if (e.target.matches('div')) {
+          let mayBePseudo = e.target.innerHTML;
+          if (lichessFriends[mayBePseudo]) {
+            ptrToPseudo.value = mayBePseudo;
+            ptrToNote.value = lichessFriends[mayBePseudo];
+            if (friendsPhotos[mayBePseudo]) {
+              ptrToImage.value = friendsPhotos[mayBePseudo];
+            }
+          }
+        }else if (e.target.matches('label')) {
+          if(e.target.classList.value === 'pseudoLichess'){
+            ptrToPseudo.value = '';
+            ptrToNote.value = '';
+            ptrToImage.value = '';
+          }
+        }
+      });
+    });
   }
-  setFriendsTable();
-  addNewNoteListener();
 });
 
 // Set the lichessFriends form
@@ -48,24 +76,42 @@ function setFriendsTable() {
     let newRow = friendsTable.insertRow(-1);
 
     let newCell = newRow.insertCell(0);
+    let newDiv = document.createElement('div');
+    newDiv.classList = 'pseudoLichess';
+
     let newText = document.createTextNode(property);
-    newCell.appendChild(newText);
+    if(friendsPhotos[property]){
+      newCell.style=`background-image: url("${friendsPhotos[property]}");`
+      newCell.classList = 'tdWithImage';
+    }
+
+    newCell.appendChild(newDiv);
+    newDiv.appendChild(newText);
 
     newCell = newRow.insertCell(1);
+
+    newDiv = document.createElement('div');
     newText = document.createTextNode(lichessFriends[property]);
-    newCell.appendChild(newText);
+
+    newCell.appendChild(newDiv);
+    newDiv.appendChild(newText);
 
     let newCell2 = newRow.insertCell(2);
-    newText = document.createTextNode('Suppr');
-    newCell2.appendChild(newText);
+    newDiv = document.createElement('div');
+    newCell2.classList = 'litterbin';
+    newText = document.createTextNode('🗑');
+    newCell2.appendChild(newDiv);
+    newDiv.appendChild(newText);
 
     newCell2.addEventListener('click',function(){
         let clickedRow = this.closest('tr');
-        let toDeletePseudo = clickedRow.cells[0].innerHTML;
+        let toDeletePseudo = clickedRow.cells[0].querySelector('div').innerHTML;
         for (let i = friendsTable.tBodies[0].rows.length-1; i > 0 ; i--) {
-          let currentPseudo = friendsTable.tBodies[0].rows[i].cells[0].innerHTML;
+          let ptr = friendsTable.tBodies[0].rows[i].cells[0].querySelector('div');
+          let currentPseudo = ptr.innerHTML;
           if(currentPseudo === toDeletePseudo){
             delete lichessFriends[toDeletePseudo];
+            if(friendsPhotos[toDeletePseudo]) delete friendsPhotos[toDeletePseudo];;
           }
         }
         clickedRow.remove();
@@ -75,51 +121,76 @@ function setFriendsTable() {
 
 function addNewNoteListener() {
   document.getElementById('action').addEventListener('click', function () {
-    let ptrToPseudo = document.getElementById('pseudo');
-    let ptrToNote = document.getElementById('note');
+    let doRefresh = false;
     if (ptrToPseudo.value.trim() !== '' && ptrToNote !== '') {
       let newPseudo = ptrToPseudo.value.trim();
       let newNote = ptrToNote.value.replace('"', "'");
+      let newImage = ptrToImage.value.trim();
+
       if (lichessFriends[newPseudo]) {
         // If already in table replace it
         for (let i = 1; i <= friendsTable.tBodies[0].rows.length-1; i++) {
-          let currentPseudo = friendsTable.tBodies[0].rows[i].cells[0].innerHTML;
+          let ptrToTd = friendsTable.tBodies[0].rows[i].cells[0];
+          let ptr = ptrToTd.querySelector('div');
+          let currentPseudo = ptr.innerHTML;
           if(currentPseudo === newPseudo){
-            friendsTable.tBodies[0].rows[i].cells[1].innerHTML = newNote;
+            friendsTable.tBodies[0].rows[i].remove();
+            delete lichessFriends[newPseudo];
+            if(newImage === '' && friendsPhotos[newPseudo]){
+              newImage = friendsPhotos[newPseudo];
+            }
+            if(friendsPhotos[newPseudo]) delete friendsPhotos[newPseudo];
           }
         }
-      } else {
-        //add it at the bottom
-        let newRow = friendsTable.insertRow(-1);
+      } 
+      //add it at the bottom
+      let newRow = friendsTable.insertRow(-1);
+      let newCell = newRow.insertCell(0);
+      let newDiv = document.createElement('div');
+      let newText = document.createTextNode(newPseudo);
+      newCell.appendChild(newDiv);
+      newDiv.appendChild(newText);
+      newDiv.classList = 'pseudoLichess';
+      if(newImage!==''){
+        newCell.style=`background-image: url("${newImage}");`
+        newCell.classList = 'tdWithImage';
+      }
 
-        let newCell = newRow.insertCell(0);
-        let newText = document.createTextNode(newPseudo);
-        newCell.appendChild(newText);
+      newCell = newRow.insertCell(1);
+      newDiv = document.createElement('div');
+      newText = document.createTextNode(newNote);
+      newCell.appendChild(newDiv);
+      newDiv.appendChild(newText);
 
-        newCell = newRow.insertCell(1);
-        newText = document.createTextNode(newNote);
-        newCell.appendChild(newText);
-
-        let newCell2 = newRow.insertCell(2);
-        newText = document.createTextNode('Suppr');
-        newCell2.setAttribute('class','supprBtn');
-        newCell2.appendChild(newText);
-        newCell2.addEventListener('click',function(){
-          let clickedRow = this.closest('tr');
-          let toDeletePseudo = clickedRow.cells[0].innerHTML;
-          for (let i = friendsTable.tBodies[0].rows.length-1; i > 0 ; i--) {
-            let currentPseudo = friendsTable.tBodies[0].rows[i].cells[0].innerHTML;
-            if(currentPseudo === toDeletePseudo){
-               delete lichessFriends[toDeletePseudo];
-            }
+      let newCell2 = newRow.insertCell(2);
+      newCell2.classList = 'litterbin supprBtn';
+      newDiv = document.createElement('div');
+      newText = document.createTextNode('🗑');
+      newCell2.appendChild(newDiv);
+      newDiv.appendChild(newText);
+      newCell2.addEventListener('click',function(){
+        let clickedRow = this.closest('tr');
+        let toDeletePseudo = clickedRow.cells[0].innerHTML;
+        for (let i = friendsTable.tBodies[0].rows.length-1; i > 0 ; i--) {
+          let currentPseudo = friendsTable.tBodies[0].rows[i].cells[0].innerHTML;
+          if(currentPseudo === toDeletePseudo){
+              delete lichessFriends[toDeletePseudo];
           }
-          clickedRow.remove();
+        }
+        clickedRow.remove();
       });
     
-      }
+  
       lichessFriends[newPseudo] = newNote;
+      if(newImage!==''){
+        friendsPhotos[newPseudo] = newImage;
+      }
       ptrToPseudo.value = '';
       ptrToNote.value = '';
+      ptrToImage.value = '';
+      if(doRefresh){
+
+      }
     }
   });
 }
@@ -347,6 +418,7 @@ if(closeElement){
     // saving friends notes
     //--------------------------
     chrome.storage.sync.set({ "lichessFriends": JSON.stringify(lichessFriends) });
+    chrome.storage.sync.set({ "friendsPhotos": JSON.stringify(friendsPhotos) });
     //--------------------------
     // closing the window
     //--------------------------
