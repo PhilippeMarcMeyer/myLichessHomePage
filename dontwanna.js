@@ -144,8 +144,12 @@ body>header {
     background: ${colors.rgbaSoftBlack};
 }
 
-#user_tag, .box__top.user-show__header,.site-buttons .dropdown,.dasher {
+#user_tag, .site-buttons .dropdown, .dasher {
     background : ${colors.dasher};
+}
+
+.box__top.user-show__header {
+    background : ${colors.primaryColor};
 }
 
 .msg-app__convo__reply{
