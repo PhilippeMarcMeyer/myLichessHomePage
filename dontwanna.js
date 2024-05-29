@@ -148,7 +148,7 @@ body>header {
     background : ${colors.dasher};
 }
 
-.box__top.user-show__header {
+.box__top.user-show__header, .round__app__table, .msg-app__convo__msgs mine, .round__app .buttons, #powerTip, #miniGame, #miniBoard, .round__app rm6  {
     background : ${colors.primaryColor};
 }
 
@@ -160,55 +160,20 @@ body>header {
     background: ${colors.neutral};
 }
 
-.round__app__table {
-    background: ${colors.primaryColor};
-}
-
- .msg-app__convo__msgs their {
+ .msg-app__convo__msgs their, .simul .simul-text, .simul__meta, .puzzle-openings__mine, .opening__next, .opening__wiki, .lpv__controls, .round__app i5z {
     background: ${colors.secondaryColor};
-}
-
-.msg-app__convo__msgs mine {
-    background: ${colors.primaryColor};
-}
-
-.round__app .buttons {
-    background: ${colors.primaryColor};
-}
-
-#powerTip, #miniGame, #miniBoard {
-    background:  ${colors.primaryColor};
-}
-
-.round__app rm6 {
-    background: ${colors.primaryColor};
 }
 
 .round__app l4x {
     background: ${colors.primaryColor};
 }
 
-.round__app i5z {
-    background: ${colors.secondaryColor};
-}
 
 .rclock {
     background: ${colors.neutral};
 }
 
-.mchat__tab-active {
-    background: ${colors.secondaryColor};
-}
-
-.rclock.running .time {
-    background: ${colors.secondaryColor};
-}h
-
-.mchat__tab.discussion.mchat__tab-active, .mchat__tab-active, .mchat__tab-active{
-    background: ${colors.secondaryColor};
-}
-
-.round .time {
+.mchat__tab-active, .rclock.running .time, .mchat__tab.discussion.mchat__tab-active, .mchat__tab-active, .mchat__tab-active, .round .time, .msg-app__side__contact.active {
     background: ${colors.secondaryColor};
 }
 
@@ -222,10 +187,6 @@ body>header {
 
 .msg-app__convo__head{
     background: ${colors.rgbaSoftBlack2};
-}
-
-.msg-app__side__contact.active{
-    background: ${colors.secondaryColor};
 }
 
 .puzzle__tools {
@@ -262,15 +223,7 @@ body>header {
     background: ${colors.primaryColor};
 }
 
-.mchat__tab.mchat__tab-active{
-    background: ${colors.secondaryColor};
-}
-
-.mchat__tab.discussion.mchat__tab-active{
-    background: ${colors.secondaryColor};
-}
-
-.mchat__tab.note.mchat__tab-active{
+.mchat__tab.mchat__tab-active, .practice__side, .mchat__tab.discussion.mchat__tab-active, .mchat__tab.note.mchat__tab-active{
     background: ${colors.secondaryColor};
 }
 
