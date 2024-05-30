@@ -27,7 +27,7 @@ function setColors(hexColor, rot, sat) {
     return rgb2hex(rgb);
 
 }
-let friendsPhotos = {};
+
 
 let isRunning = false;
 

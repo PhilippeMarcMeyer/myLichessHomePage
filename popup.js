@@ -10,7 +10,7 @@ const saturationResult = document.getElementById('result-sat');
 const logoElement = document.getElementById('logoLichess');
 const ptrToPseudo = document.getElementById('pseudo');
 const ptrToNote = document.getElementById('note');
-const ptrToImage= document.getElementById('image');
+const ptrToImage = document.getElementById('image');
 
 const menuZones = document.querySelectorAll('.menu-zones span');
 const zones = document.querySelectorAll('.zone');
@@ -32,6 +32,13 @@ menuZones
       document.getElementById(dataId).classList = 'zone chosen';
     })
   });
+
+const modal = document.querySelector('#alert');
+const closeButton = document.querySelector('.close-button');
+
+closeButton.addEventListener('click', () => {
+  modal.close();
+});
 
 // lichessFriends
 let lichessFriends = {};
@@ -57,8 +64,8 @@ chrome.storage.sync.get('lichessFriends', (result) => {
               ptrToImage.value = friendsPhotos[mayBePseudo];
             }
           }
-        }else if (e.target.matches('label')) {
-          if(e.target.classList.value === 'pseudoLichess'){
+        } else if (e.target.matches('label')) {
+          if (e.target.classList.value === 'pseudoLichess') {
             ptrToPseudo.value = '';
             ptrToNote.value = '';
             ptrToImage.value = '';
@@ -80,8 +87,8 @@ function setFriendsTable() {
     newDiv.classList = 'pseudoLichess';
 
     let newText = document.createTextNode(property);
-    if(friendsPhotos[property]){
-      newCell.style=`background-image: url("${friendsPhotos[property]}");`
+    if (friendsPhotos[property]) {
+      newCell.style = `background-image: url("${friendsPhotos[property]}");`
       newCell.classList = 'tdWithImage';
     }
 
@@ -103,18 +110,18 @@ function setFriendsTable() {
     newCell2.appendChild(newDiv);
     newDiv.appendChild(newText);
 
-    newCell2.addEventListener('click',function(){
-        let clickedRow = this.closest('tr');
-        let toDeletePseudo = clickedRow.cells[0].querySelector('div').innerHTML;
-        for (let i = friendsTable.tBodies[0].rows.length-1; i > 0 ; i--) {
-          let ptr = friendsTable.tBodies[0].rows[i].cells[0].querySelector('div');
-          let currentPseudo = ptr.innerHTML;
-          if(currentPseudo === toDeletePseudo){
-            delete lichessFriends[toDeletePseudo];
-            if(friendsPhotos[toDeletePseudo]) delete friendsPhotos[toDeletePseudo];;
-          }
+    newCell2.addEventListener('click', function () {
+      let clickedRow = this.closest('tr');
+      let toDeletePseudo = clickedRow.cells[0].querySelector('div').innerHTML;
+      for (let i = friendsTable.tBodies[0].rows.length - 1; i > 0; i--) {
+        let ptr = friendsTable.tBodies[0].rows[i].cells[0].querySelector('div');
+        let currentPseudo = ptr.innerHTML;
+        if (currentPseudo === toDeletePseudo) {
+          delete lichessFriends[toDeletePseudo];
+          if (friendsPhotos[toDeletePseudo]) delete friendsPhotos[toDeletePseudo];;
         }
-        clickedRow.remove();
+      }
+      clickedRow.remove();
     });
   }
 }
@@ -129,20 +136,20 @@ function addNewNoteListener() {
 
       if (lichessFriends[newPseudo]) {
         // If already in table replace it
-        for (let i = 1; i <= friendsTable.tBodies[0].rows.length-1; i++) {
+        for (let i = 1; i <= friendsTable.tBodies[0].rows.length - 1; i++) {
           let ptrToTd = friendsTable.tBodies[0].rows[i].cells[0];
           let ptr = ptrToTd.querySelector('div');
           let currentPseudo = ptr.innerHTML;
-          if(currentPseudo === newPseudo){
+          if (currentPseudo === newPseudo) {
             friendsTable.tBodies[0].rows[i].remove();
             delete lichessFriends[newPseudo];
-            if(newImage === '' && friendsPhotos[newPseudo]){
+            if (newImage === '' && friendsPhotos[newPseudo]) {
               newImage = friendsPhotos[newPseudo];
             }
-            if(friendsPhotos[newPseudo]) delete friendsPhotos[newPseudo];
+            if (friendsPhotos[newPseudo]) delete friendsPhotos[newPseudo];
           }
         }
-      } 
+      }
       //add it at the bottom
       let newRow = friendsTable.insertRow(-1);
       let newCell = newRow.insertCell(0);
@@ -151,8 +158,8 @@ function addNewNoteListener() {
       newCell.appendChild(newDiv);
       newDiv.appendChild(newText);
       newDiv.classList = 'pseudoLichess';
-      if(newImage!==''){
-        newCell.style=`background-image: url("${newImage}");`
+      if (newImage !== '') {
+        newCell.style = `background-image: url("${newImage}");`
         newCell.classList = 'tdWithImage';
       }
 
@@ -168,27 +175,27 @@ function addNewNoteListener() {
       newText = document.createTextNode('🗑');
       newCell2.appendChild(newDiv);
       newDiv.appendChild(newText);
-      newCell2.addEventListener('click',function(){
+      newCell2.addEventListener('click', function () {
         let clickedRow = this.closest('tr');
         let toDeletePseudo = clickedRow.cells[0].innerHTML;
-        for (let i = friendsTable.tBodies[0].rows.length-1; i > 0 ; i--) {
+        for (let i = friendsTable.tBodies[0].rows.length - 1; i > 0; i--) {
           let currentPseudo = friendsTable.tBodies[0].rows[i].cells[0].innerHTML;
-          if(currentPseudo === toDeletePseudo){
-              delete lichessFriends[toDeletePseudo];
+          if (currentPseudo === toDeletePseudo) {
+            delete lichessFriends[toDeletePseudo];
           }
         }
         clickedRow.remove();
       });
-    
-  
+
+
       lichessFriends[newPseudo] = newNote;
-      if(newImage!==''){
+      if (newImage !== '') {
         friendsPhotos[newPseudo] = newImage;
       }
       ptrToPseudo.value = '';
       ptrToNote.value = '';
       ptrToImage.value = '';
-      if(doRefresh){
+      if (doRefresh) {
 
       }
     }
@@ -241,9 +248,9 @@ if (doFilterElement && fromFilterElement && toFilterElement) {
       toFilterElement.value = null;
     }
   });
-} 
+}
 
-if(versionElement){
+if (versionElement) {
   versionElement.innerHTML = version;
 }
 
@@ -258,7 +265,7 @@ if (rotationElement && resultElement && saturationElement && saturationResult) {
       saturationResult.innerHTML = saturation.saturation;
       let sat = parseInt(saturation.saturation);
       sat = !isNaN(sat) ? sat : 0;
-      setColors(rot,sat);
+      setColors(rot, sat);
     })
   })
 
@@ -267,7 +274,7 @@ if (rotationElement && resultElement && saturationElement && saturationResult) {
     resultElement.innerHTML = rot;
     let sat = parseInt(saturationElement.value);
     rot = parseInt(rot);
-   setColors(rot,sat);
+    setColors(rot, sat);
   });
 
   saturationElement.addEventListener('change', function (event) {
@@ -275,23 +282,44 @@ if (rotationElement && resultElement && saturationElement && saturationResult) {
     saturationResult.innerHTML = sat;
     let rot = parseInt(rotationElement.value);
     sat = parseInt(sat);
-   setColors(rot,sat);
+    setColors(rot, sat);
   });
- 
+
   logoElement.addEventListener('click', function (event) {
     saturationElement.value = 0;
     rotationElement.value = 0;
     saturationResult.innerHTML = '0';
     resultElement.innerHTML = '0';
-    setColors(0,0);
+    setColors(0, 0);
   });
 }
 
-function setColors(rot,sat){
+function download() {
+  let now = new Date().getTime();
+  let fileName = `lichessFriends_save_${now}.txt`;
+  let fileContent = `let lichessFriends = ${JSON.stringify(lichessFriends)}; let friendsPhotos = ${JSON.stringify(friendsPhotos)};`;
+  let myFile = new Blob([fileContent], { type: 'text/plain' });
 
-  let rgbColor1 = {r : 37, g : 55 , b : 77};
-  let rgbColor2 = {r : 20, g : 35 , b : 49};
-  
+  window.URL = window.URL || window.webkitURL;
+  let element = document.getElementById("download");
+
+  element.setAttribute("href", window.URL.createObjectURL(myFile));
+  element.setAttribute("download", fileName);
+}
+
+function allowStorageSet(objectToSync) {
+  const maxStorage = 4096;
+  if (JSON.stringify(objectToSync).length >= maxStorage - 100) {
+    return false;
+  }
+  return true;
+}
+
+function setColors(rot, sat) {
+
+  let rgbColor1 = { r: 37, g: 55, b: 77 };
+  let rgbColor2 = { r: 20, g: 35, b: 49 };
+
   let hslColor1 = RGBToHSL(rgbColor1);
   let hslColor2 = RGBToHSL(rgbColor2);
 
@@ -363,12 +391,19 @@ if (hideChallengesElements) {
   });
 }
 
-document.querySelector('#cancelPopUp').addEventListener('click',() => {
+document.querySelector('#cancelPopUp').addEventListener('click', () => {
   window.close();
 });
 
+let downloadLink = document.getElementById("download");
+if (downloadLink) {
+  downloadLink.addEventListener('click', () => {
+    download();
+  });
+}
+
 const closeElement = document.querySelector("#closePopUp");
-if(closeElement){
+if (closeElement) {
   closeElement.disabled = false;
   closeElement.addEventListener('click', function () {
     //----------------------
@@ -385,48 +420,73 @@ if(closeElement){
     // saving areas to hide 
     //----------------------
     hideAreasElements.forEach((el) => {
-        let checkedOnes = [];
-        hideAreasElements.forEach((x) => {
-          if (x.checked) {
-            checkedOnes.push(x.getAttribute('id'));
-          }
-        });
-        chrome.storage.sync.set({ 'hideAreas': checkedOnes });
+      let checkedOnes = [];
+      hideAreasElements.forEach((x) => {
+        if (x.checked) {
+          checkedOnes.push(x.getAttribute('id'));
+        }
+      });
+      chrome.storage.sync.set({ 'hideAreas': checkedOnes });
     })
     //--------------------------
     // saving challenges to hide 
     //--------------------------
     hideChallengesElements.forEach((el) => {
-        let checkedOnes = [];
-        hideChallengesElements.forEach((x) => {
-          if (x.checked) {
-            checkedOnes.push(x.getAttribute('data-target'));
-          }
-        });
-        chrome.storage.sync.set({ "hideChallenges": checkedOnes });
+      let checkedOnes = [];
+      hideChallengesElements.forEach((x) => {
+        if (x.checked) {
+          checkedOnes.push(x.getAttribute('data-target'));
+        }
+      });
+      chrome.storage.sync.set({ "hideChallenges": checkedOnes });
     });
     //--------------------------
     // saving bots filtering params 
     //--------------------------
-      let lichessFilterBots = {
-        doFilter : doFilterElement.checked,
-        filterFrom : fromFilterElement.value,
-        filterTo : toFilterElement.value
-      }
-      chrome.storage.sync.set({ "mlhpFilterBots": JSON.stringify(lichessFilterBots) });
+    let lichessFilterBots = {
+      doFilter: doFilterElement.checked,
+      filterFrom: fromFilterElement.value,
+      filterTo: toFilterElement.value
+    }
+    chrome.storage.sync.set({ "mlhpFilterBots": JSON.stringify(lichessFilterBots) });
     //--------------------------
     // saving friends notes
     //--------------------------
-    chrome.storage.sync.set({ "lichessFriends": JSON.stringify(lichessFriends) });
-    chrome.storage.sync.set({ "friendsPhotos": JSON.stringify(friendsPhotos) });
+    let isErrorSavingLichessFriends = false;
+    if (allowStorageSet({ "lichessFriends": JSON.stringify(lichessFriends) })) {
+      chrome.storage.sync.set({ "lichessFriends": JSON.stringify(lichessFriends) }, function () {
+        if (chrome.runtime.lastError) {
+          console.log(chrome.runtime.lastError.message);
+          isErrorSavingLichessFriends = true;
+          return;
+        }
+      });
+    } else {
+      isErrorSavingLichessFriends = true;
+    }
+
+    let isErrorSavingFriendsPhotos = false;
+    if (allowStorageSet({ "friendsPhotos": JSON.stringify(friendsPhotos) })) {
+      chrome.storage.sync.set({ "friendsPhotos": JSON.stringify(friendsPhotos) }, function () {
+        if (chrome.runtime.lastError) {
+          console.log(chrome.runtime.lastError.message);
+          isErrorSavingFriendsPhotos = true;
+          return;
+        }
+      });
+    } else {
+      isErrorSavingFriendsPhotos = true;
+    }
+
     //--------------------------
     // closing the window
     //--------------------------
-
-    setTimeout(function () {
-      window.close();
-    }, 300)
-
+    if (!isErrorSavingFriendsPhotos && !isErrorSavingLichessFriends) {
+      setTimeout(function () {
+        window.close();
+      }, 300)
+    } else {
+      modal.showModal();
+    }
   });
 }
-

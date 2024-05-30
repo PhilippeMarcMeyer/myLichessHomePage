@@ -10,6 +10,12 @@
 	<link rel="stylesheet" href="./popup.css">
 </head>
 <body>
+	<dialog class="modal" id="alert">
+		<p>Sorry!</p>
+		<p>You are reached the size limit for your list of friends (set by chrome)</p>
+		<button class="close-button">Close</button><br/>
+		<i>Try use shorter urls for pictures or lighter comments</i>
+	  </dialog>
 	<div class="container" id="colorized-zone" style="background: linear-gradient(hsl(213,35%,22%),hsl(209,42%,14%));">
 		<span id="ext-version"></span>
 		<div class="menu-zones"><span data-id="colors-zone" class="chosen">Colors</span><span data-id="bots-zone">Bots</span><span data-id="friends-zone">Friends</span></div>
@@ -71,7 +77,7 @@
 		</div>
 		<div class="zone" id="friends-zone">
 			<div class="zone-wrapper">
-				<h2>Adding a small note to friends names</h2>
+				<h2>Adding a small note to friends names <a href="#" id="download">💾</a></h2>
 				<i>Add a picture from an online repository like imgur.com</i>
 				<div id="friends-liste">
 					<table>
