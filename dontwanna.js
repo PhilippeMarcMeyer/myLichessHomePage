@@ -660,27 +660,30 @@ const run = (challenges) => {
 
 const launchObserver = (challenges, filterBotsParams) => {
     const observer = new MutationObserver((mutations) => {
-
         if (!isRunning) run(challenges);
-
-        displayFriendsNotes();
-
-        if(window.location.pathname === '/player/bots') {
-            if(filterBotsParams.doFilter){
-                filterBots(filterBotsParams.filterFrom,filterBotsParams.filterTo);
-            }  
-        }
-
-        if (window.location.pathname.includes('/following')) {
-            displayFriendsNotesInFollowingPage();
-        }
-
-        if(window.location.pathname.startsWith('/inbox')){
-            displayFriendsNotesInFriendPage();
-        }
+        setRepeatedly();
     });
     observer.observe(document, { childList: true, subtree: true ,childList : true});
 };
+
+function setRepeatedly(){
+
+    displayFriendsNotes();
+
+    if(window.location.pathname === '/player/bots') {
+        if(filterBotsParams.doFilter){
+            filterBots(filterBotsParams.filterFrom,filterBotsParams.filterTo);
+        }  
+    }
+
+    if (window.location.pathname.includes('/following')) {
+        displayFriendsNotesInFollowingPage();
+    }
+
+    if(window.location.pathname.startsWith('/inbox')){
+        displayFriendsNotesInFriendPage();
+    }
+}
 
 let lichessFriends = null;
 getFriendsList();
@@ -695,6 +698,7 @@ const init = (rot, sat, targets, challenges) => {
     setTimeout(function(){
         displayFriendsNotesInFriendPage();
     },1000);
+
 };
 
 chrome.storage.sync.get('rotation', (result) => {
@@ -840,7 +844,8 @@ function displayFriendsNotes() { // on hover on the name of playes in games
     friendZones.forEach((x) => {
         let friendParent = x.parentNode;
         let isDiv = friendParent.tagName.toUpperCase() === 'DIV' || friendParent.tagName.toUpperCase() === 'H1';
-        if (isDiv && friendParent.classList.contains('player')) {
+        if (isDiv && friendParent.classList.contains('player') && !friendParent.classList.contains('mlhp')) {
+            friendParent.classList.add('mlhp'); // not twice
             let name = x.getAttribute('href');
             if (name) {
                 name = name.substring(3);
