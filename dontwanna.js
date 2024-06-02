@@ -87,6 +87,13 @@ body {
     background: linear-gradient(${colors.linearBgStart}, ${colors.linearBgEnd});
 }
 
+.player-photo-in-game{
+    width: 50px;
+    clip-path: circle(50%);    
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
 body>header {
     background : ${colors.linearBgStart} !important;
     border-bottom: 1px solid ${colors.linearBgStart} !important;
@@ -588,7 +595,6 @@ const runOnce = (targets, challenges) => {
     }
 
     run(challenges); // Will also run once at startup and then when the MutationObserver reports changes in the zone
-
 };
 
 const run = (challenges) => {
@@ -656,10 +662,9 @@ const launchObserver = (challenges, filterBotsParams) => {
     const observer = new MutationObserver((mutations) => {
 
         if (!isRunning) run(challenges);
-        setTimeout(function(){
-            displayFriendsNotes();
-        },1000);
-        
+
+        displayFriendsNotes();
+
         if(window.location.pathname === '/player/bots') {
             if(filterBotsParams.doFilter){
                 filterBots(filterBotsParams.filterFrom,filterBotsParams.filterTo);
@@ -690,7 +695,6 @@ const init = (rot, sat, targets, challenges) => {
     setTimeout(function(){
         displayFriendsNotesInFriendPage();
     },1000);
-
 };
 
 chrome.storage.sync.get('rotation', (result) => {
@@ -842,8 +846,22 @@ function displayFriendsNotes() { // on hover on the name of playes in games
                 name = name.substring(3);
                 if (lichessFriends[name]) {
                     if (!x.innerHTML.includes('|')) {
-                        x.innerHTML += `|${lichessFriends[name]}`;
+                        x.innerHTML += `|<span>${lichessFriends[name]}</span>`;
                         x.style += ';white-space: break-spaces;'
+                        x.style.display='none';
+                        x.offsetHeight; 
+                        x.style.display='';
+                        if(friendsPhotos[name]){
+                            let photoUrl = friendsPhotos[name];
+                            let link1 = document.querySelector('.ruser-top a.user-link');
+                            if(link1 && link1.getAttribute('href').endsWith(`/${name}`)){
+                                link1.insertAdjacentHTML('afterend', `<img src="${photoUrl}" class="player-photo-in-game">`); 
+                            }
+                            let link2 = document.querySelector('.ruser-bottom a.user-link');
+                            if(link2 && link2.getAttribute('href').endsWith(`/${name}`)){
+                                link2.insertAdjacentHTML('afterend', `<img src="${photoUrl}" class="player-photo-in-game">`); 
+                            }
+                        }
                     }
                 }
             }
