@@ -874,27 +874,29 @@ function displayFriendsNotes() { // on hover on the name of playes in games
     });
 } 
 
-function displayFriendsNotesInFollowingPage() { // on hover on the name of playes in games
+function displayFriendsNotesInFollowingPage() { // the page which lists friends : on hover on the name of players in games
     if (!lichessFriends) return;
     if (!window.location.pathname.includes('/following')) return;
+    let boxTop = document.querySelector('.box__top');
+    if (boxTop && boxTop.classList.contains('mlhp')) return;
+
     let friendZones = document.querySelectorAll('a.user-link');
     if (!friendZones) return;
+    boxTop.classList.add('mlhp');
     friendZones.forEach((x) => {
         let name = x.getAttribute('href');
         if (name) {
             name = name.substring(3);
             if (lichessFriends[name]) {
-                if (!x.innerHTML.includes(':')) {
-                    x.innerHTML += ` :<br/>${lichessFriends[name]}`;
-                    x.style += ';white-space: break-spaces;'
-                }
+                x.innerHTML += ` :<br/>${lichessFriends[name]}`;
+                x.style += ';white-space: break-spaces;'
             }
         }
     });
 } 
 
 
-function displayFriendsNotesInFriendPage() { // on hover on the name of playes in games
+function displayFriendsNotesInFriendPage() { // the page on your firend : on hover on the name of playes in games
     let loc = window.location.pathname;
     let offset = -1;
     let keys = Object.keys(lichessFriends);
