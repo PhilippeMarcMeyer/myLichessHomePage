@@ -838,6 +838,8 @@ function HSLToRGB(hsl) {
 }
 
 function displayFriendsNotes() { // on hover on the name of playes in games
+    let isAlreadySet =  document.querySelector('.mlhp');
+    if(isAlreadySet) return;
     if (!lichessFriends) return;
     let friendZones = document.querySelectorAll('a.user-link:not(.ulpt)');
     if (!friendZones) return;
@@ -850,29 +852,33 @@ function displayFriendsNotes() { // on hover on the name of playes in games
             if (name) {
                 name = name.substring(3);
                 if (lichessFriends[name]) {
-                    if (!x.innerHTML.includes('|')) {
-                        x.innerHTML += `|<span>${lichessFriends[name]}</span>`;
-                        x.style += ';white-space: break-spaces;'
-                        x.style.display='none';
-                        x.offsetHeight; 
-                        x.style.display='';
-                        if(friendsPhotos[name]){
-                            let photoUrl = friendsPhotos[name];
-                            let link1 = document.querySelector('.ruser-top a.user-link');
-                            if(link1 && link1.getAttribute('href').endsWith(`/${name}`)){
-                                link1.insertAdjacentHTML('afterend', `<img src="${photoUrl}" class="player-photo-in-game">`); 
-                            }
-                            let link2 = document.querySelector('.ruser-bottom a.user-link');
-                            if(link2 && link2.getAttribute('href').endsWith(`/${name}`)){
-                                link2.insertAdjacentHTML('afterend', `<img src="${photoUrl}" class="player-photo-in-game">`); 
-                            }
+                    x.innerHTML += `|<span>${lichessFriends[name]}</span>`;
+                    x.style += ';white-space: break-spaces;'
+                    x.style.display = 'none';
+                    x.offsetHeight;
+                    x.style.display = '';
+                    if (friendsPhotos[name]) {
+                        let photoUrl = friendsPhotos[name];
+                        let link1 = document.querySelector('.ruser-top a.user-link:not(.mlhp)');
+                        if (link1 && link1.getAttribute('href').endsWith(`/${name}`)) {
+                            link1.insertAdjacentHTML('afterend', `<img src="${photoUrl}" class="player-photo-in-game">`);
+                            link1.classList.add('mlhp');
+                        }
+                        let link2 = document.querySelector('.ruser-bottom a.user-link:not(.mlhp)');
+                        if (link2 && link2.getAttribute('href').endsWith(`/${name}`)) {
+                            link2.insertAdjacentHTML('afterend', `<img src="${photoUrl}" class="player-photo-in-game">`);
+                            link2.classList.add('mlhp');
                         }
                     }
                 }
             }
         }
     });
-} 
+    let whitePlayer = document.querySelector('div.player.white a.user-link');
+    if(whitePlayer) whitePlayer.dispatchEvent(new MouseEvent('mouseover', { 'view': window, 'bubbles': true, 'cancelable': true }));
+    let blackPlayer = document.querySelector('div.player.black a.user-link');
+    if(blackPlayer) blackPlayer.dispatchEvent(new MouseEvent('mouseover', { 'view': window, 'bubbles': true, 'cancelable': true }));
+ } 
 
 function displayFriendsNotesInFollowingPage() { // the page which lists friends : on hover on the name of players in games
     if (!lichessFriends) return;
@@ -893,10 +899,12 @@ function displayFriendsNotesInFollowingPage() { // the page which lists friends 
             }
         }
     });
+    let firstLink = document.querySelector('a.user-link');
+    firstLink.dispatchEvent(new MouseEvent('mouseover', { 'view': window, 'bubbles': true, 'cancelable': true }));
 } 
 
 
-function displayFriendsNotesInFriendPage() { // the page on your firend : on hover on the name of playes in games
+function displayFriendsNotesInFriendPage() { // the page on your friends : on hover on the name of playres in games
     let loc = window.location.pathname;
     let offset = -1;
     let keys = Object.keys(lichessFriends);
