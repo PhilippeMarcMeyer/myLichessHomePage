@@ -202,7 +202,7 @@ td#action{
 
 .saturation {
     position: absolute;
-    top: 40px;
+    top: 70px;
     right: 40px;
 }
 
@@ -211,6 +211,21 @@ td#action{
 }
 
 #saturation {
+    width: 100px;
+    margin-top: 10px;
+}
+
+.lightness {
+    position: absolute;
+    top: 70px;
+    left: 40px;
+}
+
+.lightness > span {
+    vertical-align: 18%;
+}
+
+#lightness {
     width: 100px;
     margin-top: 10px;
 }

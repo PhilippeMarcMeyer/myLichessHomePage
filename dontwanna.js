@@ -11,7 +11,7 @@ const hex2rgb = c => {
 
 const rgb2hex = c => '#' + c.match(/\d+/g).map(x => (+x).toString(16).padStart(2, 0)).join``;
 
-function setColors(hexColor, rot, sat) {
+function setColors(hexColor, rot, sat, light) {
 
     let rgb = hex2rgb(hexColor);
 
@@ -19,6 +19,7 @@ function setColors(hexColor, rot, sat) {
 
     hslColor.h = (hslColor.h + rot) % 360;
     hslColor.s = (hslColor.s + sat);
+    hslColor.l = (hslColor.l + light);
 
     rgb = HSLToRGB(hslColor);
 
@@ -67,15 +68,16 @@ const colors = modelColors.filter((x) => {
 })[0].colors;
 
 
-const setModel = (rot, sat, challenges) => {
+const setModel = (rot, sat, light, challenges) => {
 
 const rotation = rot;
 const saturation = sat;
+const lightness = light;
 
-    if (rotation > 0 || saturation != 0) {
+    if (rotation > 0 || saturation != 0 || lightness != 0) {
         for (const [key, value] of Object.entries(colors)) {
             if (value.startsWith('#')) {
-                colors[key] = setColors(value, rotation, saturation);
+                colors[key] = setColors(value, rotation, saturation, lightness);
             }
         }
     }
@@ -691,19 +693,28 @@ getFriendsList();
 let filterBotsParams = null;
  getFilterBotsParams();
 
-const init = (rot, sat, targets, challenges) => {
-    setModel(rot, sat, challenges)
+const init = (rot, sat, light, targets, challenges) => {
+    
+    sat = sat > 100 ? 100 : sat;
+    sat = sat < 0 ? 0 : sat;
+
+    light = light > 100 ? 100 : light;
+    light = light < 0 ? 0 : light;
+
+    setModel(rot, sat, light, challenges)
     runOnce(targets, challenges);
-    launchObserver(challenges,filterBotsParams);
-    setTimeout(function(){
+    launchObserver(challenges, filterBotsParams);
+    setTimeout(function () {
         displayFriendsNotesInFriendPage();
-    },1000);
+    }, 1000);
 
 };
 
 chrome.storage.sync.get('rotation', (result) => {
     let rot = 0;
     let sat = 0;
+    let light = 0;
+
     if (!result || result.rotation === undefined) {
         rot = 0;
         chrome.storage.sync.set({ rotation: 0 });
@@ -755,7 +766,15 @@ chrome.storage.sync.get('rotation', (result) => {
                 } else {
                     sat = parseInt(result.saturation);
                 }
-                 init(rot, sat, targets, challenges);
+                chrome.storage.sync.get('lightness', (result) => {
+                    if (!result || result.lightness === undefined) {
+                        light = 0;
+                        chrome.storage.sync.set({ lightness: 0 });
+                    } else {
+                        light = parseInt(result.lightness);
+                    }
+                     init(rot, sat, light, targets, challenges);
+                });
             });
         });
       });
@@ -938,7 +957,6 @@ function displayFriendsNotesInFriendPage() { // the page on your friends : on ho
 
         noteZone.appendChild(document.createTextNode(lichessFriends[keys[offset]]));
         friendZone.appendChild(noteZone);
-// not to be publish nor stored to github
         let photoUrl = null;
         if(friendsPhotos[keys[offset]]){
             photoUrl = friendsPhotos[keys[offset]];

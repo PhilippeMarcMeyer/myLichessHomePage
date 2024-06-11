@@ -1,12 +1,14 @@
 'use strict';
 
-const version = 'v 1.3';
+const version = 'v 1.4';
 const versionElement = document.getElementById('ext-version');
 const colorizedZone = document.getElementById('colorized-zone');
 const rotationElement = document.getElementById('rotation');
 const resultElement = document.getElementById('result');
 const saturationElement = document.getElementById('saturation');
 const saturationResult = document.getElementById('result-sat');
+const lightnessElement = document.getElementById('lightness');
+const lightnessResult = document.getElementById('result-lightness');
 const logoElement = document.getElementById('logoLichess');
 const ptrToPseudo = document.getElementById('pseudo');
 const ptrToNote = document.getElementById('note');
@@ -254,7 +256,7 @@ if (versionElement) {
   versionElement.innerHTML = version;
 }
 
-if (rotationElement && resultElement && saturationElement && saturationResult) {
+if (rotationElement && resultElement && saturationElement && saturationResult && lightnessElement && lightnessResult) {
   chrome.storage.sync.get('rotation', function (rotation) {
     rotationElement.value = rotation.rotation;
     resultElement.innerHTML = rotation.rotation;
@@ -265,7 +267,13 @@ if (rotationElement && resultElement && saturationElement && saturationResult) {
       saturationResult.innerHTML = saturation.saturation;
       let sat = parseInt(saturation.saturation);
       sat = !isNaN(sat) ? sat : 0;
-      setColors(rot, sat);
+      chrome.storage.sync.get('lightness', function (lightness) {
+        lightnessElement.value = lightness.lightness;
+        lightnessResult.innerHTML = lightness.lightness;
+        let light = parseInt(lightness.lightness);
+        light = !isNaN(light) ? light : 0;
+        setColors(rot, sat, light);
+      })
     })
   })
 
@@ -274,23 +282,39 @@ if (rotationElement && resultElement && saturationElement && saturationResult) {
     resultElement.innerHTML = rot;
     let sat = parseInt(saturationElement.value);
     rot = parseInt(rot);
-    setColors(rot, sat);
+    let light = parseInt(lightnessElement.value);
+    setColors(rot, sat, light);
   });
 
   saturationElement.addEventListener('change', function (event) {
     let sat = event.target.value;
     saturationResult.innerHTML = sat;
-    let rot = parseInt(rotationElement.value);
     sat = parseInt(sat);
-    setColors(rot, sat);
+    let rot = parseInt(rotationElement.value);
+    let light = parseInt(lightnessElement.value);
+
+    setColors(rot, sat,light);
   });
+
+  lightnessElement.addEventListener('change', function (event) {
+    let light = event.target.value;
+    lightnessResult.innerHTML = light;
+    light = parseInt(light);
+    let rot = parseInt(rotationElement.value);
+    let sat = parseInt(saturationElement.value);
+
+    setColors(rot, sat,light);
+  });
+
 
   logoElement.addEventListener('click', function (event) {
     saturationElement.value = 0;
     rotationElement.value = 0;
+    lightnessElement.value = 0;
     saturationResult.innerHTML = '0';
+    lightnessResult.innerHTML = '0';
     resultElement.innerHTML = '0';
-    setColors(0, 0);
+    setColors(0, 0, 0);
   });
 }
 
@@ -315,7 +339,7 @@ function allowStorageSet(objectToSync) {
   return true;
 }
 
-function setColors(rot, sat) {
+function setColors(rot, sat, light) {
 
   let rgbColor1 = { r: 37, g: 55, b: 77 };
   let rgbColor2 = { r: 20, g: 35, b: 49 };
@@ -326,8 +350,15 @@ function setColors(rot, sat) {
   hslColor1.h = (hslColor1.h + rot) % 360;
   hslColor2.h = (hslColor2.h + rot) % 360;
 
+  sat = sat > 100 ? 100 : sat;
+  sat = sat < 0 ? 0 : sat;
   hslColor1.s = (hslColor1.s + sat);
   hslColor2.s = (hslColor2.s + sat);
+
+  light = light > 100 ? 100 : light;
+  light = light < 0 ? 0 : light;
+  hslColor1.l = (hslColor1.l + light);
+  hslColor2.l = (hslColor2.l + light);
 
   let rgb1 = HSLToRGB(hslColor1);
   let rgb2 = HSLToRGB(hslColor2);
@@ -416,6 +447,11 @@ if (closeElement) {
     //----------------------
     let sat = saturationElement.value;
     chrome.storage.sync.set({ "saturation": sat });
+    //----------------------
+    // saving lightness
+    //----------------------
+    let light = lightnessElement.value;
+    chrome.storage.sync.set({ "lightness": light });
     //----------------------
     // saving areas to hide 
     //----------------------
