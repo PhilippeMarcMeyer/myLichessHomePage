@@ -11,6 +11,8 @@ My Lichess Home page modifies the interface of lichess.org using the dark mode
 - Change colors at will by changing the % of saturation from - 35% to + 35%
 - Hide areas on the landing page, if you don't want to see them
 - Hide challenge speed you don't use
+- Filter the bots by ratings
+- Add notes on friends with their picture (add their url from a site like imgur) If you create a freind with 'logo' as pseudo and add a picture, it will show in the main page if you hide the lobby timeline
 
 To use it : select the dark mode in lichess 
 set your preferences in the popup window
