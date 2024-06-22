@@ -96,6 +96,22 @@ body {
     object-fit: cover;
 }
 
+.board-menu {
+    background:  ${colors.linearBgStart};
+}
+
+.link-popup__content {
+    background:  ${colors.linearBgStart} !important;
+}
+
+.user-show__social .dropdown .dropdown-window {
+    background: ${colors.linearBgStart} !important;
+}
+
+.user-show__social .dropdown:hover>a {
+    background: ${colors.primaryColor} !important;
+}
+
 body>header {
     background : ${colors.linearBgStart} !important;
     border-bottom: 1px solid ${colors.linearBgStart} !important;
@@ -137,6 +153,24 @@ body>header {
     background : ${colors.rgbaSoftWhite};
 }
 
+.relation-actions{
+    min-width: 200px;
+}
+
+div .relation-actions>a{
+    display : inline-block;
+    width: 100%;
+}
+
+.lpv__player,.lpv__moves,
+.lpv__moves>variation{
+    background : ${colors.primaryColor};
+}
+    
+.lpv__moves>comment{
+    background: ${colors.secondaryColor};
+}
+
 .lobby__blog.ublog-post-cards {
     margin-top: 18px;
 }
@@ -176,7 +210,6 @@ body>header {
 .round__app l4x {
     background: ${colors.primaryColor};
 }
-
 
 .rclock {
     background: ${colors.neutral};
@@ -543,6 +576,14 @@ group.radio label, group.radio .label {
 
 .slist-invert tbody tr:nth-child(odd) {
     background: transparent;
+}
+
+rm6{
+    min-height: 300px;
+}
+
+l4x {
+    min-height: 260px;
 }
 
 `;
@@ -962,22 +1003,29 @@ function displayFriendsNotesInFriendPage() { // the page on your friends : on ho
             photoUrl = friendsPhotos[keys[offset]];
         }
         if(photoUrl){
-           let photoZone = isFriendPage ? document.querySelector('.box__top.user-show__header') : friendZone;
+           let photoZone = isFriendPage ? document.querySelector('#us_profile .profile-side .user-infos') : friendZone;
            if(photoZone){
-              let photoDiv = document.createElement("div");
-              photoDiv.classList = 'user-infos';
-              let photoDiv2 = document.createElement("div");
-              photoDiv2.id = 'userImage';
-              photoDiv2.style = isFriendPage ? 'width:140px;position: absolute;right: 5px;top: 152px;' : 'width:70px;position:absolute;left:2px;';
-              photoDiv2.innerHTML = `<img src="${photoUrl}" style="width: 100%;">`
-              photoDiv.appendChild(photoDiv2);
-              photoZone.appendChild(photoDiv);
-              if(!isFriendPage) photoZone.style = 'position: relative;width: 100%;padding-left: 75px;';
               if(isFriendPage) {
+                photoZone.style = "position:relative;"
+                let photoDiv = document.createElement("div");
+                photoDiv.id = 'userImage';
+                photoDiv.style = 'width:140px;position:absolute;right:5px;top:0;';
+                photoDiv.innerHTML = `<img src="${photoUrl}" style="width: 100%;">`
+                photoZone.appendChild(photoDiv);
                 let bioZone = document.querySelector('div.user-infos p.bio');
                 if(bioZone){
                     bioZone.style = 'max-width:200px;min-height:70px;'
                 }
+              }else{
+                let photoDiv = document.createElement("div");
+                photoDiv.classList = 'user-infos';
+                let photoDiv2 = document.createElement("div");
+                photoDiv2.id = 'userImage';
+                photoDiv2.style = 'width:70px;position:absolute;left:2px;';
+                photoDiv2.innerHTML = `<img src="${photoUrl}" style="width: 100%;">`
+                photoDiv.appendChild(photoDiv2);
+                photoZone.appendChild(photoDiv);
+                photoZone.style = 'position: relative;width:100%;padding-left:75px;';
               }
            }
         }
