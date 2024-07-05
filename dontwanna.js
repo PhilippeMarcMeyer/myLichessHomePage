@@ -68,12 +68,12 @@ const colors = modelColors.filter((x) => {
 })[0].colors;
 
 
-const setModel = (rot, sat, light, challenges) => {
-
+const setModel = (rot, sat, light, noCssPlease, challenges) => {
+const changeCss = !noCssPlease;
 const rotation = rot;
 const saturation = sat;
 const lightness = light;
-
+if(!changeCss){
     if (rotation > 0 || saturation != 0 || lightness != 0) {
         for (const [key, value] of Object.entries(colors)) {
             if (value.startsWith('#')) {
@@ -81,6 +81,7 @@ const lightness = light;
             }
         }
     }
+}
 
 const Add_Custom_Style = css => document.head.appendChild(document.createElement("style")).innerHTML = css;
 
@@ -250,7 +251,7 @@ div .relation-actions>a{
 
 .game__meta, .mchat__content,.mchat__say, .mchat__tabs,.crosstable > povs,
  .crosstable__users, .crosstable__users > a, .round__underboard > .crosstable > fill {
-    background : ${colors.rgbaSoftWhite};
+    background : ${colors.primaryColor};
 }
 
 .ricons {
@@ -333,18 +334,6 @@ div .relation-actions>a{
 
 .lpools > div:hover{
     background: ${colors.secondaryColor} !important;
-}
-
-.button:hover{
-    background: ${colors.secondaryColor};
-}
-
-.button.active{
-    background: ${colors.secondaryColor};
-}
-
-button.fbt.rematch.white{
-    background: ${colors.secondaryColor};
 }
 
 #powerTip .forecast-info .title, 
@@ -434,7 +423,7 @@ option, optgroup {
     border-top: 1px solid ${colors.linearBgStart} !important;
 }
 
-.btn-rack__btn, .btn-rack form, #friend_box .friend_box_title, .button.button-metal, .button.button-empty:not(.disabled):hover, .button.button-empty.button-green:not(.disabled):hover, .button.button-empty.button-red:not(.disabled):hover {
+.btn-rack__btn, .btn-rack form, #friend_box .friend_box_title, .button.button-empty:not(.disabled):hover, .button.button-empty.button-green:not(.disabled):hover, .button.button-empty.button-red:not(.disabled):hover {
     background: ${colors.neutral} !important;
 }
 
@@ -482,7 +471,7 @@ group.radio label, group.radio .label {
 }
 
 #logoLichess{
-    opacity: 0.6;
+    opacity: 1;
 }
 
 .swiss__player-info .stats h2, .swiss__controls, .slist thead {
@@ -554,8 +543,24 @@ group.radio label, group.radio .label {
     border-radius:5px;
 }
 
+.button.config_hook,.button.config_friend,.button.config_ai {
+    background: ${colors.linearBgStart} !important;
+}
+
+.button:hover{
+    background: ${colors.secondaryColor};
+}
+
+.button.active{
+    background: ${colors.secondaryColor};
+}
+
+button.fbt.rematch.white{
+    background: ${colors.secondaryColor};
+}
+
 .button.button-metal{
-    background: rgba(186, 186, 186, .05) !important;
+    background: ${colors.linearBgStart} !important;
 }
 
 .button:hover{
@@ -585,8 +590,14 @@ rm6{
 l4x {
     min-height: 260px;
 }
-
+.mlhp-logo {
+    margin-top: 10px;
+    width: 260px;
+    margin-left: 35px;
+    border-radius: 10px;
+}
 `;
+if(!changeCss) styleCss = '';
 
 if (challenges.length >= 9) {
     styleCss += `
@@ -606,7 +617,7 @@ if (challenges.length < 11) {
     `;
 }
 
-Add_Custom_Style(styleCss);
+if(styleCss.length > 0) Add_Custom_Style(styleCss);
 }
 
 const runOnce = (targets, challenges) => {
@@ -617,25 +628,39 @@ const runOnce = (targets, challenges) => {
             target.style.display = 'none';
         }
     });
-    let isAlternateLogo = false;
+    let altLogos = [];
+
+    if(friendsPhotos){
+        for (const photoName in friendsPhotos) {
+            if(photoName.startsWith('logo')){
+                altLogos.push(friendsPhotos[photoName]);
+            }
+        }
+    }
+
+    let areAlternateLogos = altLogos.length > 0;
+
     let logo = `<img id='logoLichess' src="data:image/svg+xml,%3Csvg viewBox='-2 -2 54 54' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='${colors.logo}' stroke='${colors.logo}' stroke-linejoin='round'%0Ad='M38.956.5c-3.53.418-6.452.902-9.286 2.984C5.534 1.786-.692 18.533.68 29.364 3.493 50.214 31.918 55.785 41.329 41.7c-7.444 7.696-19.276 8.752-28.323 3.084C3.959 39.116-.506 27.392 4.683 17.567 9.873 7.742 18.996 4.535 29.03 6.405c2.43-1.418 5.225-3.22 7.655-3.187l-1.694 4.86 12.752 21.37c-.439 5.654-5.459 6.112-5.459 6.112-.574-1.47-1.634-2.942-4.842-6.036-3.207-3.094-17.465-10.177-15.788-16.207-2.001 6.967 10.311 14.152 14.04 17.663 3.73 3.51 5.426 6.04 5.795 6.756 0 0 9.392-2.504 7.838-8.927L37.4 7.171z'/%3E%3C/svg%3E%0A"></img>`;
-    if(friendsPhotos && friendsPhotos['logo']){
-        isAlternateLogo = true;
-        logo = `<img id='logoLichess' style='margin-top:2%;width:70%;margin-left:15%;border-radius:10px;' src='${friendsPhotos['logo']}'></img>`;
+    if(areAlternateLogos){
+        let logoOffset = Math.floor(Math.random() * altLogos.length);
+        logo = `<img id='logoLichess' class='mlhp-logo' src='${altLogos[logoOffset]}'></img>`;
     }
 
     if (targets.includes('lobby__timeline')) {
         let lobbyPointer = document.querySelector('.lobby__timeline');
         if (lobbyPointer) {
-            if(!isAlternateLogo){
+            if(!areAlternateLogos){
                 lobbyPointer.style.display = 'flex';
                 lobbyPointer.style.borderRadius = '50%';
             }else{
                 lobbyPointer.style.display = 'block';
+                lobbyPointer.style.overflow = 'hidden';
+
             }
             lobbyPointer.innerHTML = logo; 
         }
     }
+
 
     run(challenges); // Will also run once at startup and then when the MutationObserver reports changes in the zone
 };
@@ -692,9 +717,7 @@ const run = (challenges) => {
                         if (perf) perf.style.display = 'none';
                     }
                 }
-
             }
-
         });
     }
 
@@ -704,12 +727,16 @@ const run = (challenges) => {
 const launchObserver = (challenges, filterBotsParams) => {
     const observer = new MutationObserver((mutations) => {
         if (!isRunning) run(challenges);
-        setRepeatedly();
+        setRepeatedly(filterBotsParams);
     });
     observer.observe(document, { childList: true, subtree: true ,childList : true});
 };
 
-function setRepeatedly(){
+function setRepeatedly(filterBotsParams){
+
+    const rules = ['Golden Rules : ', 'Develop', 'Move pawns with caution', 'Rooks on open files', 'Protect your pieces', 'Hold the center', 'Keep opponent out of your half square', "Don't open the center before you are ready", 'Be dynamic'];
+    const myNotes = document.querySelector('.mchat__note');
+    if(myNotes && myNotes.value === '')  myNotes.value  = rules.join('\n - ')
 
     displayFriendsNotes();
 
@@ -734,7 +761,7 @@ getFriendsList();
 let filterBotsParams = null;
  getFilterBotsParams();
 
-const init = (rot, sat, light, targets, challenges) => {
+const init = (rot, sat, light, noCssPlease, targets, challenges) => {
     
     sat = sat > 100 ? 100 : sat;
     sat = sat < 0 ? 0 : sat;
@@ -742,7 +769,7 @@ const init = (rot, sat, light, targets, challenges) => {
     light = light > 100 ? 100 : light;
     light = light < 0 ? 0 : light;
 
-    setModel(rot, sat, light, challenges)
+    setModel(rot, sat, light, noCssPlease, challenges)
     runOnce(targets, challenges);
     launchObserver(challenges, filterBotsParams);
     setTimeout(function () {
@@ -755,6 +782,7 @@ chrome.storage.sync.get('rotation', (result) => {
     let rot = 0;
     let sat = 0;
     let light = 0;
+    let noCssPlease = false;
 
     if (!result || result.rotation === undefined) {
         rot = 0;
@@ -814,7 +842,15 @@ chrome.storage.sync.get('rotation', (result) => {
                     } else {
                         light = parseInt(result.lightness);
                     }
-                     init(rot, sat, light, targets, challenges);
+                    chrome.storage.sync.get('noCssPlease', (result) => {
+                        if (!result || result.lightness === undefined) {
+                            noCssPlease = false;
+                            chrome.storage.sync.set({ noCssPlease: false });
+                        } else {
+                            noCssPlease = result.noCssPlease;
+                        }
+                         init(rot, sat, light, noCssPlease, targets, challenges);
+                    });
                 });
             });
         });
