@@ -733,10 +733,14 @@ const launchObserver = (challenges, filterBotsParams) => {
 };
 
 function setRepeatedly(filterBotsParams){
-
     const rules = ['Golden Rules : ', 'Develop', 'Move pawns with caution', 'Rooks on open files', 'Protect your pieces', 'Hold the center', 'Keep opponent out of your half square', "Don't open the center before you are ready", 'Be dynamic'];
     const myNotes = document.querySelector('.mchat__note');
-    if(myNotes && myNotes.value === '')  myNotes.value  = rules.join('\n - ')
+    if(myNotes && myNotes.value === ''){
+        const userName = getUserName();
+        if(isOneOfUserGames(userName)){
+            myNotes.value  = rules.join('\n - ')
+        }
+    }
 
     displayFriendsNotes();
 
@@ -1136,3 +1140,22 @@ function filterBots(minScore, maxScore) {
         });
 }
 
+function getUserName(){
+    return document.getElementById('user_tag')?.innerHTML;
+}
+
+function isOneOfUserGames(userName){
+    let result = false;
+    let playersInfos = document.querySelectorAll('.game__meta__players a.user-link');
+    playersInfos.forEach((x) => {
+        let name = x.getAttribute('href');
+        if (name) {
+            name = name.substring(3);
+            name = name.split('/')[0];
+            if (name === userName) {
+                result = true;
+            }
+        }
+    });
+    return result;
+}
