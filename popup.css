@@ -26,6 +26,7 @@ textarea#goldenRules{
     width: 70%;
     height: 100%;
     overflow-y: auto;
+    font-family :"Noto sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .zone{
