@@ -252,6 +252,20 @@ if (doFilterElement && fromFilterElement && toFilterElement) {
   });
 }
 
+const ptrToGoldenRules = document.getElementById('goldenRules');
+if(ptrToGoldenRules){
+  chrome.storage.sync.get('mlhpGoldenRules', (result) => {
+    if (result && result.mlhpGoldenRules !== undefined) {
+      const storedGoldenRules = JSON.parse(result.mlhpGoldenRules);
+      if (storedGoldenRules && storedGoldenRules.length > 0){
+        ptrToGoldenRules.value  = storedGoldenRules.join('\n - ');
+      }else{
+        ptrToGoldenRules.value  = '';
+      }
+    }
+  });
+}
+
 if (versionElement) {
   versionElement.innerHTML = version;
 }
@@ -485,6 +499,15 @@ if (closeElement) {
       filterTo: toFilterElement.value
     }
     chrome.storage.sync.set({ "mlhpFilterBots": JSON.stringify(lichessFilterBots) });
+    //--------------------------
+    // saving game rules
+    //--------------------------
+    if(ptrToGoldenRules){
+      let rulesToSaveText = ptrToGoldenRules.value.replace('"', "'").replace("'", "\'");
+      let rulesToSave = rulesToSaveText.split('\n - ');
+
+      chrome.storage.sync.set({ "mlhpGoldenRules": JSON.stringify(rulesToSave) });
+   }
     //--------------------------
     // saving friends notes
     //--------------------------

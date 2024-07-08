@@ -724,21 +724,22 @@ const run = (challenges) => {
     isRunning = false;
 };
 
-const launchObserver = (challenges, filterBotsParams) => {
+const launchObserver = (challenges, filterBotsParams, infosGoldenRules) => {
     const observer = new MutationObserver((mutations) => {
         if (!isRunning) run(challenges);
-        setRepeatedly(filterBotsParams);
+        setRepeatedly(filterBotsParams, infosGoldenRules);
     });
     observer.observe(document, { childList: true, subtree: true ,childList : true});
 };
 
-function setRepeatedly(filterBotsParams){
-    const rules = ['Golden Rules : ', 'Develop', 'Move pawns with caution', 'Rooks on open files', 'Protect your pieces', 'Hold the center', 'Keep opponent out of your half square', "Don't open the center before you are ready", 'Be dynamic'];
-    const myNotes = document.querySelector('.mchat__note');
-    if(myNotes && myNotes.value === ''){
-        const userName = getUserName();
-        if(isOneOfUserGames(userName)){
-            myNotes.value  = rules.join('\n - ')
+function setRepeatedly(filterBotsParams,infosGoldenRules){
+    if(infosGoldenRules && infosGoldenRules.length >0){
+        const myNotes = document.querySelector('.mchat__note');
+        if(myNotes && myNotes.value === ''){
+            const userName = getUserName();
+            if(isOneOfUserGames(userName)){
+                myNotes.value  = infosGoldenRules.join('\n - ')
+            }
         }
     }
 
@@ -765,6 +766,13 @@ getFriendsList();
 let filterBotsParams = null;
  getFilterBotsParams();
 
+ let infosGoldenRules = null;
+ getGoldenRules();
+
+
+ //const rules = ['Golden Rules : ', 'Develop', 'Move pawns with caution', 'Rooks on open files', 'Protect your pieces', 'Hold the center', 'Keep opponent out of your half square', "Don't open the center before you are ready", 'Be dynamic'];
+
+
 const init = (rot, sat, light, noCssPlease, targets, challenges) => {
     
     sat = sat > 100 ? 100 : sat;
@@ -775,7 +783,7 @@ const init = (rot, sat, light, noCssPlease, targets, challenges) => {
 
     setModel(rot, sat, light, noCssPlease, challenges)
     runOnce(targets, challenges);
-    launchObserver(challenges, filterBotsParams);
+    launchObserver(challenges, filterBotsParams, infosGoldenRules);
     setTimeout(function () {
         displayFriendsNotesInFriendPage();
     }, 1000);
@@ -1091,6 +1099,14 @@ function getFilterBotsParams() {
     chrome.storage.sync.get('mlhpFilterBots', (result) => {
         if (result && result.mlhpFilterBots !== undefined) {
             filterBotsParams = JSON.parse(result.mlhpFilterBots);
+        }
+    });
+}
+
+function getGoldenRules() {
+    chrome.storage.sync.get('mlhpGoldenRules', (result) => {
+        if (result && result.mlhpGoldenRules !== undefined) {
+            infosGoldenRules = JSON.parse(result.mlhpGoldenRules);
         }
     });
 }
